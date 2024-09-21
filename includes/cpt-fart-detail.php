@@ -1,4 +1,7 @@
 <?php
+ add_action( 'rest_api_init', 'fc_register_fart_detail_cpt' );
+ add_action( 'rest_api_init', 'fc_register_fart_detail_category_taxonomy' );
+ add_action( 'rest_api_init', 'fc_register_fart_detail_tag_taxonomy' );
 function fc_register_fart_detail_cpt(): void {
     $labels = array(
         'name'                  => _x( 'Fart Details', 'Post Type General Name', 'fart-calculator' ),
@@ -113,4 +116,12 @@ function fc_register_fart_detail_tag_taxonomy() {
     );
 
     register_taxonomy( 'fart_detail_tag', array( 'fart_detail' ), $args );
+}
+function fc_flush_rewrite_rules() {
+    // Trigger CPT registration
+    $fart_calculator = new Fart_Calculator();
+    $fart_calculator->fc_register_fart_detail_cpt();
+    
+    // Flush rewrite rules
+    flush_rewrite_rules();
 }

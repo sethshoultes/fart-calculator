@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Fart Calculator
  * Description: A fun calculator that estimates fart frequency based on user inputs, with detailed rankings and front-end submission.
- * Version: 1.7 
+ * Version: 1.8 
  * Author: Seth Shoultes
  * License: GPL2
  */
@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/rest-api.php';
+//require_once plugin_dir_path( __FILE__ ) . 'includes/cpt-fart-details.php';
 
 
 /**
@@ -81,8 +82,6 @@ class Fart_Calculator {
         add_action( 'wp_ajax_fc_fart_detail_vote', array( $this, 'fc_handle_fart_detail_vote' ) );
         add_action( 'wp_ajax_nopriv_fc_fart_detail_vote', array( $this, 'fc_handle_fart_detail_vote' ) );
 
-         // Register the REST API routes
-       // add_action( 'rest_api_init', 'fc_register_fart_rest_api_routes' );
     }
 
     /**

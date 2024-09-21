@@ -8,7 +8,6 @@ To get a specific fart detail: https://your-site.com/wp-json/fart-calculator/v1/
 
 // Register the REST API routes
 add_action( 'rest_api_init', 'fc_register_fart_rest_api_routes' );
-
 function fc_register_fart_rest_api_routes() {
     // Route for getting all fart details
     register_rest_route( 'fart-calculator/v1', '/farts/', array(
