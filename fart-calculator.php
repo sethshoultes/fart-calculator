@@ -384,7 +384,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     public function fc_enqueue_voting_script() {
         wp_enqueue_script( 'fc-voting-script', plugins_url( '/js/fart-voting.js', __FILE__ ), array( 'jquery' ), null, true );
     
-        // Localize the script with the AJAX URL and nonce
+    // Localize the script with the AJAX URL and nonce
         wp_localize_script( 'fc-voting-script', 'fc_ajax_object', array(
             'ajax_url' => admin_url( 'admin-ajax.php' ), // This defines the AJAX URL
             'fc_ajax_nonce' => wp_create_nonce( 'fc_submit_fart_joke_vote' ) // This creates a nonce for security
@@ -788,46 +788,52 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     public function fc_display_fart_jokes() {
          ob_start();
 
-    $fart_jokes = new WP_Query( array(
-        'post_type'      => 'fart_joke',
-        'posts_per_page' => -1,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-    ) );
+        $fart_jokes = new WP_Query( array(
+            'post_type'      => 'fart_joke',
+            'posts_per_page' => -1,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        ) );
 
-    if ( $fart_jokes->have_posts() ) {
-        echo '<div class="fc-fart-jokes-list">';
-        while ( $fart_jokes->have_posts() ) {
-            $fart_jokes->the_post();
-            $upvotes   = get_post_meta( get_the_ID(), '_fc_fart_joke_upvotes', true );
-            $downvotes = get_post_meta( get_the_ID(), '_fc_fart_joke_downvotes', true );
+        if ( $fart_jokes->have_posts() ) {
+            echo '<div class="fc-fart-jokes-list">';
+            while ( $fart_jokes->have_posts() ) {
+                $fart_jokes->the_post();
+                $upvotes   = get_post_meta( get_the_ID(), '_fc_fart_joke_upvotes', true );
+                $downvotes = get_post_meta( get_the_ID(), '_fc_fart_joke_downvotes', true );
 
-            // Ensure default values if meta doesn't exist
-            $upvotes   = $upvotes ? $upvotes : 0;
-            $downvotes = $downvotes ? $downvotes : 0;
+                // Ensure default values if meta doesn't exist
+                $upvotes   = $upvotes ? $upvotes : 0;
+                $downvotes = $downvotes ? $downvotes : 0;
 
-            echo '<div class="fc-fart-joke">';
-            echo '<h3>' . esc_html( get_the_title() ) . '</h3>';
-            echo '<p>' . esc_html( get_the_content() ) . '</p>';
-            
-            // Voting display
-            echo '<p><strong>' . __( 'Upvotes:', 'fart-calculator' ) . '</strong> ' . esc_html( $upvotes ) . '</p>';
-            echo '<p><strong>' . __( 'Downvotes:', 'fart-calculator' ) . '</strong> ' . esc_html( $downvotes ) . '</p>';
+                echo '<div class="fc-fart-joke">';
+                echo '<h3><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
+                //echo '<p>' . esc_html( get_the_content() ) . '</p>';
+                echo '<p>' . esc_html( get_the_excerpt() ) . '</p>';
+                
+                // Voting display
+                echo '<p><strong>' . __( 'Upvotes:', 'fart-calculator' ) . '</strong> ' . esc_html( $upvotes ) . '</p>';
+                echo '<p><strong>' . __( 'Downvotes:', 'fart-calculator' ) . '</strong> ' . esc_html( $downvotes ) . '</p>';
 
-            // Upvote and Downvote buttons
-            echo '<button class="fc-vote-button fc-upvote" data-joke-id="' . esc_attr( get_the_ID() ) . '" data-vote-type="upvote">👍 Upvote</button>';
-            echo '<button class="fc-vote-button fc-downvote" data-joke-id="' . esc_attr( get_the_ID() ) . '" data-vote-type="downvote">👎 Downvote</button>';
-            
+                // Upvote and Downvote buttons
+                echo '<button class="fc-vote-button fc-upvote" data-joke-id="' . esc_attr( get_the_ID() ) . '" data-vote-type="upvote">👍 Upvote</button>';
+                echo '<button class="fc-vote-button fc-downvote" data-joke-id="' . esc_attr( get_the_ID() ) . '" data-vote-type="downvote">👎 Downvote</button>';
+                
+                echo '</div>';
+            }
             echo '</div>';
+        } else {
+            echo '<p>' . __( 'No jokes found.', 'fart-calculator' ) . '</p>';
         }
-        echo '</div>';
-    } else {
-        echo '<p>' . __( 'No jokes found.', 'fart-calculator' ) . '</p>';
-    }
 
-    return ob_get_clean();
+        return ob_get_clean();
     }
-    
+    //Adds a default upvote value of 0 to fart jokes
+    function fc_initialize_fart_joke_upvotes( $post_id, $post, $update ): void {
+        if ( $post->post_type == 'fart_joke' && ! get_post_meta( post_id: $post_id, key: '_fc_fart_joke_upvotes', single: true ) ) {
+            update_post_meta( post_id: $post_id, meta_key: '_fc_fart_joke_upvotes', meta_value: 1 ); // Initialize upvotes if not set
+        }
+    }
     // Shortcode for frontend joke submission
     public function fc_fart_joke_submission_form() {
         ob_start();
@@ -873,6 +879,36 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
         return ob_get_clean();
     }
+    // AJAX handler for voting on fart jokes
+    function fc_user_has_voted( $user_id, $joke_id ) {
+        // Get the user's votes meta field
+        $user_votes = get_user_meta( $user_id, '_fc_fart_joke_votes', true );
+    
+        // Check if the user has already voted for this joke
+        if ( is_array( $user_votes ) && in_array( $joke_id, $user_votes ) ) {
+            return true; // User has already voted
+        }
+    
+        return false; // User has not voted
+    }
+    
+    //
+    function fc_record_user_vote( $user_id, $joke_id ) {
+        // Get the user's existing votes
+        $user_votes = get_user_meta( $user_id, '_fc_fart_joke_votes', true );
+    
+        // If no votes exist, create a new array
+        if ( ! is_array( $user_votes ) ) {
+            $user_votes = array();
+        }
+    
+        // Add the joke ID to the list of jokes the user has voted on
+        $user_votes[] = $joke_id;
+    
+        // Update the user meta
+        update_user_meta( $user_id, '_fc_fart_joke_votes', $user_votes );
+    }
+    
 
     // Shortcode to Display Fart Joke Leaderboard
     public function fc_fart_joke_leaderboard() {
@@ -925,12 +961,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     
         return ob_get_clean();
     }
-    
-    function fc_initialize_fart_joke_upvotes( $post_id, $post, $update ): void {
-        if ( $post->post_type == 'fart_joke' && ! get_post_meta( post_id: $post_id, key: '_fc_fart_joke_upvotes', single: true ) ) {
-            update_post_meta( post_id: $post_id, meta_key: '_fc_fart_joke_upvotes', meta_value: 1 ); // Initialize upvotes if not set
-        }
-    }
+
 
 
 
@@ -983,8 +1014,15 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             if ( $theme_template ) {
                 return $theme_template;
             } else {
-                // Use the plugin's template
                 return plugin_dir_path( __FILE__ ) . 'templates/single-fart_detail.php';
+            }
+        } elseif ( is_singular( 'fart_joke' ) ) {
+            // Check if a custom template for fart jokes exists in the theme
+            $theme_template = locate_template( array( 'single-fart_joke.php' ) );
+            if ( $theme_template ) {
+                return $theme_template;
+            } else {
+                return plugin_dir_path( __FILE__ ) . 'templates/single-fart_joke.php';
             }
         }
         return $template;
