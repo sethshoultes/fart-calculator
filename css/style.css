@@ -1,295 +1,3 @@
-/* Fart Calculator Styles */
-
-/* Fart Calculator Form */
-#fc-fart-calculator-form label,
-#fc-fart-detail-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-#fc-fart-calculator-form input[type="number"],
-#fc-fart-calculator-form input[type="text"],
-#fc-fart-calculator-form select,
-#fc-fart-calculator-form textarea,
-#fc-fart-detail-form input[type="text"],
-#fc-fart-detail-form input[type="number"],
-#fc-fart-detail-form select,
-#fc-fart-detail-form textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-}
-
-#fc-fart-calculator-form input[type="submit"],
-#fc-fart-detail-form input[type="submit"] {
-    padding: 10px 20px;
-    background-color: #0073aa;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
-}
-
-#fc-fart-calculator-form input[type="submit"]:hover,
-#fc-fart-detail-form input[type="submit"]:hover {
-    background-color: #005177;
-}
-
-/* Fart Details List */
-.fc-fart-details-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.fc-fart-detail {
-    flex: 1 1 calc(33.333% - 20px);
-    border: 1px solid #ccc;
-    padding: 15px;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    transition: transform 0.3s;
-}
-
-.fc-fart-detail:hover {
-    transform: scale(1.05);
-}
-
-.fc-fart-detail h3 {
-    margin-top: 0;
-}
-
-.fc-fart-detail a {
-    text-decoration: none;
-    color: #0073aa;
-}
-
-.fc-fart-detail a:hover {
-    text-decoration: underline;
-}
-.fc-fart-description {
-    margin-top: 10px;
-    font-style: italic;
-    color: #555;
-}
-
-/* Responsive Design */
-@media (max-width: 992px) {
-    .fc-fart-detail {
-        flex: 1 1 calc(50% - 20px);
-    }
-}
-
-@media (max-width: 600px) {
-    .fc-fart-detail {
-        flex: 1 1 100%;
-    }
-}
-
-/* Fart Ranker Styles */
-.fc-fart-ranker {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.fc-fart-ranker-item {
-    flex: 1 1 calc(33.333% - 20px);
-    border: 1px solid #ccc;
-    padding: 15px;
-    box-sizing: border-box;
-    background-color: #fff;
-    border-radius: 5px;
-    transition: transform 0.3s;
-}
-
-.fc-fart-ranker-item:hover {
-    transform: scale(1.05);
-}
-
-.fc-fart-ranker-item h3 {
-    margin-top: 0;
-}
-
-.fc-fart-ranker-item p {
-    margin: 5px 0;
-}
-
-.fc-rate-button {
-    padding: 8px 12px;
-    background-color: #ff6600;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
-}
-
-.fc-rate-button:hover {
-    background-color: #cc5200;
-}
-
-/* Rating Modal Styles */
-#fc-rating-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.fc-rating-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    position: relative;
-    width: 90%;
-    max-width: 400px;
-}
-
-.fc-close-modal {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-/* Calculator Results */
-.fc-calculation-results {
-    border: 1px solid #28a745;
-    background-color: #e6ffe6;
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 800px;
-    margin: 20px auto;
-}
-
-.fc-calculation-results h2 {
-    color: #155724;
-}
-
-.fc-calculation-results h3 {
-    color: #155724;
-}
-
-.fc-calculation-results p {
-    margin: 5px 0;
-}
-
-/* Submission Form Feedback */
-.fc-submission-success {
-    color: green;
-}
-
-.fc-submission-error {
-    color: red;
-}
-
-.fc-submission-errors ul {
-    list-style-type: disc;
-    padding-left: 20px;
-}
-
-
-.fc-fart-jokes-list {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-}
-
-.fc-fart-joke-item {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
-}
-
-.fc-fart-joke-title {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.fc-fart-joke-title a {
-    text-decoration: none;
-    color: #0073aa;
-}
-
-.fc-fart-joke-title a:hover {
-    color: #005177;
-}
-
-.fc-fart-joke-excerpt {
-    font-size: 1em;
-    color: #666;
-    margin-bottom: 15px;
-}
-
-.fc-fart-joke-votes {
-    display: flex;
-    gap: 20px;
-    font-size: 0.9em;
-    color: #555;
-}
-
-.fc-fart-joke-upvotes, .fc-fart-joke-downvotes {
-    background-color: #fff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-.fc-fart-joke-single {
-    padding: 40px;
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-}
-
-.fc-fart-joke-title {
-    font-size: 2em;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.fc-fart-joke-content {
-    font-size: 1.2em;
-    color: #666;
-    margin-bottom: 30px;
-}
-
-.fc-fart-joke-voting {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.fc-vote-button {
-    background-color: #0073aa;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.fc-vote-button:hover {
-    background-color: #005177;
-}
-
-.fc-vote-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
 
 /* Leaderboard container */
 .fc-fart-joke-leaderboard {
@@ -350,7 +58,7 @@
 }
 
 /* Votes display */
-.fc-joke-votes {
+.fc-joke-votes, .fc-fart-joke-votes, .fc-fart-detail-votes {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
@@ -368,29 +76,115 @@
 }
 
 .fc-upvotes {
-    color: #28a745;
+    color: #28a745; /* Green for upvotes */
 }
 
 .fc-downvotes {
-    color: #dc3545;
+    color: #dc3545; /* Red for downvotes */
 }
 
-/* Mobile-friendly styling */
-@media (max-width: 768px) {
-    .fc-fart-joke-leaderboard {
-        padding: 20px;
-    }
+/* Unified Style for List Pages (Fart Details and Fart Jokes) */
+.fc-fart-details-list, .fc-fart-jokes-list {
+    padding: 30px;
+    background-color: #f7f9fb;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+}
 
-    .fc-leaderboard-item {
+/* Individual Item (for both Fart Details and Fart Jokes) */
+.fc-fart-detail, .fc-fart-joke-item {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.fc-fart-detail:hover, .fc-fart-joke-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: scale(1.05);
+}
+
+.fc-fart-detail h3, .fc-fart-joke-title {
+    font-size: 1.5em;
+    color: #0073aa;
+    margin-bottom: 10px;
+}
+
+.fc-fart-detail h3 a, .fc-fart-joke-title a {
+    text-decoration: none;
+    color: #0073aa;
+}
+
+.fc-fart-detail h3 a:hover, .fc-fart-joke-title a:hover {
+    color: #005177;
+}
+
+/* Vote Buttons */
+.fc-vote-button {
+    background-color: #0073aa;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fc-vote-button:hover {
+    background-color: #005177;
+}
+
+.fc-vote-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .fc-fart-detail, .fc-fart-joke-item {
         padding: 15px;
     }
 
-    .fc-joke-votes {
+    .fc-joke-votes, .fc-fart-joke-votes, .fc-fart-detail-votes {
         flex-direction: column;
         gap: 10px;
     }
 
     .fc-upvotes, .fc-downvotes {
         width: 100%;
+    }
+}
+
+.fc-fart-joke-single {
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.fc-fart-joke-title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.fc-fart-joke-content {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .fc-fart-joke-single {
+        padding: 20px;
+    }
+
+    .fc-fart-joke-content {
+        font-size: 1em;
     }
 }
