@@ -35,7 +35,7 @@ Fart Calculator is a comprehensive WordPress plugin that allows users to submit 
 == Usage ==
 
 - **Admin**: 
-    - Add, edit, or manage fart rankings from the Fart Ranker menu.
+    - Add, edit, or manage fart rankings from the Fart Details menu.
     - Import and export fart ranks using CSV files.
     - Customize form appearance via the WordPress Customizer.
     - Use the widget to display top-rated farts in widget areas.
