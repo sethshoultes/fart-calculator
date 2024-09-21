@@ -390,15 +390,43 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             'fc_ajax_nonce' => wp_create_nonce( 'fc_submit_fart_joke_vote' ) // This creates a nonce for security
         ));
     }
+
+     //
+     public function fc_record_user_vote( $user_id, $joke_id ): void {
+        // Get the user's existing votes
+        $user_votes = get_user_meta( user_id: $user_id, key: '_fc_fart_joke_votes', single: true );
+    
+        // If no votes exist, create a new array
+        if ( ! is_array( value: $user_votes ) ) {
+            $user_votes = array();
+        }
+    
+        // Add the joke ID to the list of jokes the user has voted on
+        $user_votes[] = $joke_id;
+    
+        // Update the user meta
+        update_user_meta( user_id: $user_id, meta_key: '_fc_fart_joke_votes', meta_value: $user_votes );
+    }
     
     public function fc_handle_fart_joke_vote() {
+        // Check if the user is logged in
+        if ( ! is_user_logged_in() ) {
+            wp_send_json_error( __( 'You need to be logged in to vote.', 'fart-calculator' ) );
+        }
+        
         // Check nonce for security
         check_ajax_referer( 'fc_submit_fart_joke_vote', 'fc_fart_joke_vote_nonce' );
     
         // Get the post ID and sanitize inputs
         $fart_id = intval( $_POST['fart_id'] );
         $vote_type = sanitize_text_field( $_POST['vote_type'] );
-    
+        $user_id = get_current_user_id();
+
+        // Check if the user has already voted
+        if ( $this->fc_user_has_voted( $user_id, $fart_id ) ) {
+            wp_send_json_error( __( 'You have already voted on this joke.', 'fart-calculator' ) );
+        }
+        
         // Validate the vote type
         if ( ! in_array( $vote_type, array( 'upvote', 'downvote' ), true ) ) {
             wp_send_json_error( __( 'Invalid vote type.', 'fart-calculator' ) );
@@ -410,21 +438,21 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             wp_send_json_error( __( 'Fart Joke not found.', 'fart-calculator' ) );
         }
     
-        // Handle upvotes
+        // Handle upvotes and downvotes
         if ( $vote_type === 'upvote' ) {
             $upvotes = get_post_meta( $fart_id, '_fc_fart_joke_upvotes', true );
             $upvotes = $upvotes ? $upvotes + 1 : 1;
             update_post_meta( $fart_id, '_fc_fart_joke_upvotes', $upvotes );
-            wp_send_json_success( __( 'Upvote counted!', 'fart-calculator' ) );
-        }
-    
-        // Handle downvotes
-        if ( $vote_type === 'downvote' ) {
+        } else if ( $vote_type === 'downvote' ) {
             $downvotes = get_post_meta( $fart_id, '_fc_fart_joke_downvotes', true );
             $downvotes = $downvotes ? $downvotes + 1 : 1;
             update_post_meta( $fart_id, '_fc_fart_joke_downvotes', $downvotes );
-            wp_send_json_success( __( 'Downvote counted!', 'fart-calculator' ) );
         }
+         // Record the vote for the user
+        $this->fc_record_user_vote( $user_id, $fart_id );
+
+        wp_send_json_success( __( 'Your vote has been recorded!', 'fart-calculator' ) );
+
     
         wp_send_json_error( __( 'An error occurred.', 'fart-calculator' ) );
     }
@@ -786,48 +814,44 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
     // Shortcode to display fart jokes
     public function fc_display_fart_jokes() {
-         ob_start();
-
+        ob_start();
+    
         $fart_jokes = new WP_Query( array(
             'post_type'      => 'fart_joke',
             'posts_per_page' => -1,
             'orderby'        => 'date',
             'order'          => 'DESC',
         ) );
-
+    
         if ( $fart_jokes->have_posts() ) {
-            echo '<div class="fc-fart-jokes-list">';
+            echo '<div class="fc-fart-jokes-list">'; // Container for all jokes
             while ( $fart_jokes->have_posts() ) {
                 $fart_jokes->the_post();
                 $upvotes   = get_post_meta( get_the_ID(), '_fc_fart_joke_upvotes', true );
                 $downvotes = get_post_meta( get_the_ID(), '_fc_fart_joke_downvotes', true );
-
-                // Ensure default values if meta doesn't exist
+    
+                // Default values if upvotes/downvotes aren't set yet
                 $upvotes   = $upvotes ? $upvotes : 0;
                 $downvotes = $downvotes ? $downvotes : 0;
-
-                echo '<div class="fc-fart-joke">';
-                echo '<h3><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
-                //echo '<p>' . esc_html( get_the_content() ) . '</p>';
-                echo '<p>' . esc_html( get_the_excerpt() ) . '</p>';
-                
-                // Voting display
-                echo '<p><strong>' . __( 'Upvotes:', 'fart-calculator' ) . '</strong> ' . esc_html( $upvotes ) . '</p>';
-                echo '<p><strong>' . __( 'Downvotes:', 'fart-calculator' ) . '</strong> ' . esc_html( $downvotes ) . '</p>';
-
-                // Upvote and Downvote buttons
-                echo '<button class="fc-vote-button fc-upvote" data-joke-id="' . esc_attr( get_the_ID() ) . '" data-vote-type="upvote">👍 Upvote</button>';
-                echo '<button class="fc-vote-button fc-downvote" data-joke-id="' . esc_attr( get_the_ID() ) . '" data-vote-type="downvote">👎 Downvote</button>';
-                
+    
+                // Output the joke with some HTML structure for styling
+                echo '<div class="fc-fart-joke-item">'; // Individual joke container
+                echo '<h3 class="fc-fart-joke-title"><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>'; // Title with link
+                echo '<div class="fc-fart-joke-excerpt">' . esc_html( get_the_excerpt() ) . '</div>'; // Excerpt for a brief preview
+                echo '<div class="fc-fart-joke-votes">';
+                echo '<span class="fc-fart-joke-upvotes"><strong>👍 Upvotes:</strong> ' . esc_html( $upvotes ) . '</span>';
+                echo '<span class="fc-fart-joke-downvotes"><strong>👎 Downvotes:</strong> ' . esc_html( $downvotes ) . '</span>';
                 echo '</div>';
+                echo '</div>'; // End of individual joke container
             }
-            echo '</div>';
+            echo '</div>'; // End of jokes list container
         } else {
             echo '<p>' . __( 'No jokes found.', 'fart-calculator' ) . '</p>';
         }
-
+    
         return ob_get_clean();
     }
+    
     //Adds a default upvote value of 0 to fart jokes
     function fc_initialize_fart_joke_upvotes( $post_id, $post, $update ): void {
         if ( $post->post_type == 'fart_joke' && ! get_post_meta( post_id: $post_id, key: '_fc_fart_joke_upvotes', single: true ) ) {
@@ -879,8 +903,8 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
         return ob_get_clean();
     }
-    // AJAX handler for voting on fart jokes
-    function fc_user_has_voted( $user_id, $joke_id ) {
+    // Check if the user has already voted on a joke
+    function fc_user_has_voted( $user_id, $joke_id ): bool {
         // Get the user's votes meta field
         $user_votes = get_user_meta( $user_id, '_fc_fart_joke_votes', true );
     
@@ -892,22 +916,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         return false; // User has not voted
     }
     
-    //
-    function fc_record_user_vote( $user_id, $joke_id ) {
-        // Get the user's existing votes
-        $user_votes = get_user_meta( $user_id, '_fc_fart_joke_votes', true );
-    
-        // If no votes exist, create a new array
-        if ( ! is_array( $user_votes ) ) {
-            $user_votes = array();
-        }
-    
-        // Add the joke ID to the list of jokes the user has voted on
-        $user_votes[] = $joke_id;
-    
-        // Update the user meta
-        update_user_meta( $user_id, '_fc_fart_joke_votes', $user_votes );
-    }
+   
     
 
     // Shortcode to Display Fart Joke Leaderboard
@@ -917,50 +926,43 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         // Query for top fart jokes
         $top_jokes = new WP_Query( array(
             'post_type'      => 'fart_joke',
-            'posts_per_page' => 10,
-            'meta_key'       => '_fc_fart_joke_upvotes',
+            'posts_per_page' => 10, // Show top 10
             'orderby'        => 'meta_value_num',
+            'meta_key'       => '_fc_fart_joke_upvotes',
             'order'          => 'DESC',
             'post_status'    => 'publish',
-            'meta_query'     => array(
-                'relation' => 'OR',
-                array(
-                    'key'     => '_fc_fart_joke_upvotes',
-                    'compare' => 'EXISTS',
-                ),
-                array(
-                    'key'     => '_fc_fart_joke_upvotes',
-                    'compare' => 'NOT EXISTS',
-                ),
-            ),
         ) );
     
         if ( $top_jokes->have_posts() ) {
             echo '<div class="fc-fart-joke-leaderboard">';
-            echo '<h2>' . __( text: 'Top 10 Fart Jokes', domain: 'fart-calculator' ) . '</h2>';
+            echo '<h2 class="fc-leaderboard-title">' . __( 'Top 10 Fart Jokes', 'fart-calculator' ) . '</h2>';
+            echo '<ul class="fc-leaderboard-list">';
             while ( $top_jokes->have_posts() ) {
                 $top_jokes->the_post();
-                $upvotes = get_post_meta( post_id: get_the_ID(), key: '_fc_fart_joke_upvotes', single: true );
+                $upvotes   = get_post_meta( get_the_ID(), '_fc_fart_joke_upvotes', true );
                 $downvotes = get_post_meta( get_the_ID(), '_fc_fart_joke_downvotes', true );
-                
-               
-                
-
-                echo '<div class="fc-fart-joke">';
-                echo '<h3>' . esc_html( text: get_the_title() ) . '</h3>';
-                echo '<p><strong>' . __( text: 'Upvotes:', domain: 'fart-calculator' ) . '</strong> ' . esc_html( text: $upvotes ) . '</p>';
-                echo '<p><strong>' . __( text: 'Downvotes:', domain: 'fart-calculator' ) . '</strong> ' . esc_html( text: $downvotes ) . '</p>';                echo '</div>';
+    
+                // Default values if not set
+                $upvotes   = $upvotes ? $upvotes : 0;
+                $downvotes = $downvotes ? $downvotes : 0;
+    
+                echo '<li class="fc-leaderboard-item">';
+                echo '<h3 class="fc-joke-title"><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>';
+                echo '<div class="fc-joke-votes">';
+                echo '<span class="fc-upvotes"><strong>👍 Upvotes:</strong> ' . esc_html( $upvotes ) . '</span>';
+                echo '<span class="fc-downvotes"><strong>👎 Downvotes:</strong> ' . esc_html( $downvotes ) . '</span>';
+                echo '</div>';
+                echo '</li>';
             }
+            echo '</ul>';
             echo '</div>';
         } else {
-            echo '<p>' . __( text: 'No jokes found.', domain: 'fart-calculator' ) . '</p>';
+            echo '<p>' . __( 'No jokes found.', 'fart-calculator' ) . '</p>';
         }
-        
-        //Debugging
-        //var_dump( value: $top_jokes->request );
     
         return ob_get_clean();
     }
+    
 
 
 

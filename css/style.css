@@ -197,3 +197,200 @@
     list-style-type: disc;
     padding-left: 20px;
 }
+
+
+.fc-fart-jokes-list {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+.fc-fart-joke-item {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.fc-fart-joke-title {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.fc-fart-joke-title a {
+    text-decoration: none;
+    color: #0073aa;
+}
+
+.fc-fart-joke-title a:hover {
+    color: #005177;
+}
+
+.fc-fart-joke-excerpt {
+    font-size: 1em;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.fc-fart-joke-votes {
+    display: flex;
+    gap: 20px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.fc-fart-joke-upvotes, .fc-fart-joke-downvotes {
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+.fc-fart-joke-single {
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.fc-fart-joke-title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.fc-fart-joke-content {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.fc-fart-joke-voting {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.fc-vote-button {
+    background-color: #0073aa;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fc-vote-button:hover {
+    background-color: #005177;
+}
+
+.fc-vote-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Leaderboard container */
+.fc-fart-joke-leaderboard {
+    padding: 30px;
+    background-color: #f7f9fb;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Leaderboard title */
+.fc-leaderboard-title {
+    font-size: 2em;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+/* List of leaderboard items */
+.fc-leaderboard-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Individual leaderboard item */
+.fc-leaderboard-item {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.fc-leaderboard-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Joke title with link */
+.fc-joke-title {
+    font-size: 1.5em;
+    color: #0073aa;
+    margin-bottom: 10px;
+}
+
+.fc-joke-title a {
+    text-decoration: none;
+    color: #0073aa;
+}
+
+.fc-joke-title a:hover {
+    color: #005177;
+}
+
+/* Votes display */
+.fc-joke-votes {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.fc-upvotes, .fc-downvotes {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    display: inline-block;
+    width: 45%;
+    text-align: center;
+}
+
+.fc-upvotes {
+    color: #28a745;
+}
+
+.fc-downvotes {
+    color: #dc3545;
+}
+
+/* Mobile-friendly styling */
+@media (max-width: 768px) {
+    .fc-fart-joke-leaderboard {
+        padding: 20px;
+    }
+
+    .fc-leaderboard-item {
+        padding: 15px;
+    }
+
+    .fc-joke-votes {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .fc-upvotes, .fc-downvotes {
+        width: 100%;
+    }
+}
