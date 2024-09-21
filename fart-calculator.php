@@ -24,34 +24,37 @@ class Fart_Calculator {
      */
     public function __construct() {
         // Register Fart Details Custom Post Type
-        add_action( 'init', array( $this, 'fc_register_fart_detail_cpt' ), 0 );
-        add_action( 'init', array( $this, 'fc_register_fart_detail_category_taxonomy' ), 0 );
-        add_action( 'init', array( $this, 'fc_register_fart_detail_tag_taxonomy' ), 0 );
+        add_action( hook_name: 'init', callback: array( $this, 'fc_register_fart_detail_cpt' ), priority: 0 );
+        add_action( hook_name: 'init', callback: array( $this, 'fc_register_fart_detail_category_taxonomy' ), priority: 0 );
+        add_action( hook_name: 'init', callback: array( $this, 'fc_register_fart_detail_tag_taxonomy' ), priority: 0 );
 
          
         // Register Fart Jokes Custom Post Type
-        add_action( 'init', array( $this, 'fc_register_fart_joke_cpt' ) );
-        add_action( 'init', array( $this, 'fc_add_fart_joke_votes_meta') );
-        add_action( 'init', array( $this, 'fc_register_fart_joke_category_taxonomy' ), 0 );
-        add_action( 'init', array( $this, 'fc_register_fart_joke_tag_taxonomy' ), 0 );
+        add_action( hook_name: 'init', callback: array( $this, 'fc_register_fart_joke_cpt' ) );
+        add_action( hook_name: 'init', callback: array( $this, 'fc_add_fart_joke_votes_meta') );
+        add_action( hook_name: 'init', callback: array( $this, 'fc_register_fart_joke_category_taxonomy' ), priority: 0 );
+        add_action( hook_name: 'init', callback: array( $this, 'fc_register_fart_joke_tag_taxonomy' ), priority: 0 );
 
 
 
         // Add Meta Boxes
-        add_action( 'add_meta_boxes', array( $this, 'fc_add_fart_detail_meta_boxes' ) );
-        add_action( 'add_meta_boxes', array( $this, 'fc_add_fart_joke_meta_boxes' ) );
+        add_action( hook_name: 'add_meta_boxes', callback: array( $this, 'fc_add_fart_detail_meta_boxes' ) );
+        add_action( hook_name: 'add_meta_boxes', callback: array( $this, 'fc_add_fart_joke_meta_boxes' ) );
+        add_action( hook_name: 'add_meta_boxes', callback: array( $this, 'fc_add_fart_detail_votes_meta' ) );
+
 
         // Save Meta Box Data
-        add_action( 'save_post', array( $this, 'fc_save_fart_detail_meta_boxes' ) );
-        add_action( 'save_post', array( $this, 'fc_save_fart_joke_meta_boxes' ) );
+        add_action( hook_name: 'save_post', callback: array( $this, 'fc_save_fart_detail_meta_boxes' ) );
+        add_action( hook_name: 'save_post', callback: array( $this, 'fc_save_fart_joke_meta_boxes' ) );
+        add_action( hook_name: 'save_post', callback: array( $this, 'fc_save_fart_detail_votes' ) );
 
         // Customize Admin Columns
-        add_filter( 'manage_fart_detail_posts_columns', array( $this, 'fc_set_custom_fart_detail_columns' ) );
-        add_action( 'manage_fart_detail_posts_custom_column' , array( $this, 'fc_custom_fart_detail_column' ), 10, 2 );
+        add_filter( hook_name: 'manage_fart_detail_posts_columns', callback: array( $this, 'fc_set_custom_fart_detail_columns' ) );
+        add_action( hook_name: 'manage_fart_detail_posts_custom_column' , callback: array( $this, 'fc_custom_fart_detail_column' ), priority: 10, accepted_args: 2 );
 
         // Enqueue Styles
-        add_action( 'wp_enqueue_scripts', array( $this, 'fc_enqueue_styles' ) );
-        add_action( 'wp_enqueue_scripts', array( $this, 'fc_enqueue_voting_script' ) );
+        add_action( hook_name: 'wp_enqueue_scripts', callback: array( $this, 'fc_enqueue_styles' ) );
+        add_action( hook_name: 'wp_enqueue_scripts', callback: array( $this, 'fc_enqueue_voting_script' ) );
         
 
         // Shortcodes
@@ -65,13 +68,15 @@ class Fart_Calculator {
 
 
         // Template Loader
-        add_filter( 'template_include', array( $this, 'fc_load_fart_detail_template' ) );
+        add_filter( hook_name: 'template_include', callback: array( $this, 'fc_load_fart_detail_template' ) );
 
         // Initialize Rating Functionality
-        add_action( 'wp_ajax_fc_submit_fart_rating', array( $this, 'fc_handle_fart_rating' ) );
-        add_action( 'wp_ajax_nopriv_fc_submit_fart_rating', array( $this, 'fc_handle_fart_rating' ) );
-        add_action( 'wp_ajax_fc_fart_joke_vote', array( $this, 'fc_handle_fart_joke_vote' ) );
-        add_action( 'wp_ajax_nopriv_fc_fart_joke_vote', array( $this, 'fc_handle_fart_joke_vote' ) );
+        add_action( hook_name: 'wp_ajax_fc_submit_fart_rating', callback: array( $this, 'fc_handle_fart_rating' ) );
+        add_action( hook_name: 'wp_ajax_nopriv_fc_submit_fart_rating', callback: array( $this, 'fc_handle_fart_rating' ) );
+        add_action( hook_name: 'wp_ajax_fc_fart_joke_vote', callback: array( $this, 'fc_handle_fart_joke_vote' ) );
+        add_action( hook_name: 'wp_ajax_nopriv_fc_fart_joke_vote', callback: array( $this, 'fc_handle_fart_joke_vote' ) );
+        add_action( 'wp_ajax_fc_fart_detail_vote', array( $this, 'fc_handle_fart_detail_vote' ) );
+        add_action( 'wp_ajax_nopriv_fc_fart_detail_vote', array( $this, 'fc_handle_fart_detail_vote' ) );
     }
 
     /**
@@ -508,10 +513,9 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     public function fc_enqueue_voting_script() {
         wp_enqueue_script( 'fc-voting-script', plugins_url( '/js/fart-voting.js', __FILE__ ), array( 'jquery' ), null, true );
     
-    // Localize the script with the AJAX URL and nonce
         wp_localize_script( 'fc-voting-script', 'fc_ajax_object', array(
-            'ajax_url' => admin_url( 'admin-ajax.php' ), // This defines the AJAX URL
-            'fc_ajax_nonce' => wp_create_nonce( 'fc_submit_fart_joke_vote' ) // This creates a nonce for security
+            'ajax_url'      => admin_url( 'admin-ajax.php' ),
+            'fc_ajax_nonce' => wp_create_nonce( 'fc_vote_nonce' )  // Create the nonce
         ));
     }
 
@@ -532,56 +536,39 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         update_user_meta( user_id: $user_id, meta_key: '_fc_fart_joke_votes', meta_value: $user_votes );
     }
     
+    // Handle AJAX Upvote/Downvote for Fart Jokes
     public function fc_handle_fart_joke_vote() {
         // Check if the user is logged in
         if ( ! is_user_logged_in() ) {
-            wp_send_json_error( __( 'You need to be logged in to vote.', 'fart-calculator' ) );
+            wp_send_json_error( __( 'You must be logged in to vote.', 'fart-calculator' ) );
         }
-        
-        // Check nonce for security
-        check_ajax_referer( 'fc_submit_fart_joke_vote', 'fc_fart_joke_vote_nonce' );
-    
-        // Get the post ID and sanitize inputs
-        $fart_id = intval( $_POST['fart_id'] );
+
+        // Validate the nonce for fart jokes
+        if ( ! check_ajax_referer( 'fc_vote_nonce', 'nonce', false ) ) {
+            wp_send_json_error( __( 'Nonce verification failed.', 'fart-calculator' ) );
+        }
+
+        // Get and sanitize the joke ID and vote type
+        $joke_id = intval( $_POST['fart_id'] );
         $vote_type = sanitize_text_field( $_POST['vote_type'] );
-        $user_id = get_current_user_id();
 
-        // Check if the user has already voted
-        if ( $this->fc_user_has_voted( $user_id, $fart_id ) ) {
-            wp_send_json_error( __( 'You have already voted on this joke.', 'fart-calculator' ) );
-        }
-        
-        // Validate the vote type
-        if ( ! in_array( $vote_type, array( 'upvote', 'downvote' ), true ) ) {
-            wp_send_json_error( __( 'Invalid vote type.', 'fart-calculator' ) );
-        }
-    
-        // Get the fart joke post
-        $fart_joke = get_post( $fart_id );
-        if ( ! $fart_joke || $fart_joke->post_type !== 'fart_joke' ) {
-            wp_send_json_error( __( 'Fart Joke not found.', 'fart-calculator' ) );
-        }
-    
-        // Handle upvotes and downvotes
-        if ( $vote_type === 'upvote' ) {
-            $upvotes = get_post_meta( $fart_id, '_fc_fart_joke_upvotes', true );
-            $upvotes = $upvotes ? $upvotes + 1 : 1;
-            update_post_meta( $fart_id, '_fc_fart_joke_upvotes', $upvotes );
-        } else if ( $vote_type === 'downvote' ) {
-            $downvotes = get_post_meta( $fart_id, '_fc_fart_joke_downvotes', true );
-            $downvotes = $downvotes ? $downvotes + 1 : 1;
-            update_post_meta( $fart_id, '_fc_fart_joke_downvotes', $downvotes );
-        }
-         // Record the vote for the user
-        $this->fc_record_user_vote( $user_id, $fart_id );
+        // Debugging: Log the values
+        error_log( 'Joke ID: ' . $joke_id );
+        error_log( 'Vote Type: ' . $vote_type );
 
-        wp_send_json_success( __( 'Your vote has been recorded!', 'fart-calculator' ) );
+        if ( ! in_array( $vote_type, array( 'upvote', 'downvote' ), true ) || ! $joke_id ) {
+            wp_send_json_error( __( 'Invalid vote type or joke ID.', 'fart-calculator' ) );
+        }
 
-    
-        wp_send_json_error( __( 'An error occurred.', 'fart-calculator' ) );
+        // Process the vote
+        $meta_key = $vote_type === 'upvote' ? '_fc_fart_joke_upvotes' : '_fc_fart_joke_downvotes';
+        $current_votes = get_post_meta( $joke_id, $meta_key, true );
+        $new_votes = $current_votes ? intval( $current_votes ) + 1 : 1;
+
+        update_post_meta( $joke_id, $meta_key, $new_votes );
+
+        wp_send_json_success( __( 'Vote recorded successfully.', 'fart-calculator' ) );
     }
-
-    
 
     /**
      * Sets Custom Columns for Fart Details CPT.
@@ -617,6 +604,98 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
                 break;
         }
     }
+
+    // Add Meta Boxes for Voting in Fart Details
+public function fc_add_fart_detail_votes_meta() {
+    add_meta_box(
+        'fc_fart_detail_votes_meta',
+        __( 'Fart Detail Votes', 'fart-calculator' ),
+        array( $this, 'fc_fart_detail_votes_meta_callback' ),
+        'fart_detail', // Make sure this is the correct post type
+        'side',
+        'high'
+    );
+}
+
+    // Callback to display voting meta data in the admin
+    public function fc_fart_detail_votes_meta_callback( $post ) {
+        // Add a nonce field for security
+        wp_nonce_field( 'fc_save_fart_detail', 'fc_fart_detail_nonce' );
+
+        // Get current upvotes and downvotes
+        $upvotes = get_post_meta( $post->ID, '_fc_fart_detail_upvotes', true );
+        $downvotes = get_post_meta( $post->ID, '_fc_fart_detail_downvotes', true );
+
+        // Display the upvotes and downvotes
+        echo '<p><strong>' . __( 'Upvotes:', 'fart-calculator' ) . '</strong> ';
+        echo '<input type="number" name="fc_fart_detail_upvotes" value="' . esc_attr( $upvotes ) . '" /></p>';
+        echo '<p><strong>' . __( 'Downvotes:', 'fart-calculator' ) . '</strong> ';
+        echo '<input type="number" name="fc_fart_detail_downvotes" value="' . esc_attr( $downvotes ) . '" /></p>';
+    }
+
+    // Save Meta Box Data
+    public function fc_save_fart_detail_votes( $post_id ) {
+        // Check if nonce is set
+        if ( ! isset( $_POST['fc_fart_detail_nonce'] ) ) return;
+
+        // Verify the nonce
+        if ( ! wp_verify_nonce( $_POST['fc_fart_detail_nonce'], 'fc_save_fart_detail' ) ) return;
+
+        // Check if it's an autosave
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+
+        // Save Upvotes and Downvotes
+        if ( isset( $_POST['fc_fart_detail_upvotes'] ) ) {
+            update_post_meta( $post_id, '_fc_fart_detail_upvotes', intval( $_POST['fc_fart_detail_upvotes'] ) );
+        }
+
+        if ( isset( $_POST['fc_fart_detail_downvotes'] ) ) {
+            update_post_meta( $post_id, '_fc_fart_detail_downvotes', intval( $_POST['fc_fart_detail_downvotes'] ) );
+        }
+    }
+    // Handle AJAX Upvote/Downvote for Fart Details
+    public function fc_handle_fart_detail_vote() {
+        // Check if the user is logged in
+        if ( ! is_user_logged_in() ) {
+            wp_send_json_error( __( 'You must be logged in to vote.', 'fart-calculator' ) );
+        }
+
+        if ( ! check_ajax_referer( 'fc_vote_nonce', 'nonce', false ) ) {
+            wp_send_json_error( __( 'Nonce verification failed for Fart Detail.', 'fart-calculator' ) );
+        }
+        $detail_id = intval( $_POST['fart_id'] );
+        $vote_type = sanitize_text_field( $_POST['vote_type'] );
+        $user_id = get_current_user_id(); // Get the logged-in user's ID
+
+        if ( ! in_array( $vote_type, array( 'upvote', 'downvote' ), true ) || ! $detail_id ) {
+            wp_send_json_error( __( 'Invalid vote type or detail ID.', 'fart-calculator' ) );
+        }
+
+        // Check if the user has already voted on this fart detail
+        $voters = get_post_meta( $detail_id, '_fc_fart_detail_voters', true );
+        if ( ! is_array( $voters ) ) {
+            $voters = array();
+        }
+
+        if ( in_array( $user_id, $voters ) ) {
+            wp_send_json_error( __( 'You have already voted on this fart detail.', 'fart-calculator' ) );
+        }
+
+        // Record the user's vote
+        $meta_key = $vote_type === 'upvote' ? '_fc_fart_detail_upvotes' : '_fc_fart_detail_downvotes';
+        $current_votes = get_post_meta( $detail_id, $meta_key, true );
+        $new_votes = $current_votes ? intval( $current_votes ) + 1 : 1;
+
+        update_post_meta( $detail_id, $meta_key, $new_votes );
+
+        // Store the user ID in the voters array to prevent multiple votes
+        $voters[] = $user_id;
+        update_post_meta( $detail_id, '_fc_fart_detail_voters', $voters );
+
+        wp_send_json_success( __( 'Vote recorded successfully.', 'fart-calculator' ) );
+    }
+
+
 
     /**
      * Enqueues the Plugin's CSS Stylesheet.
@@ -721,11 +800,11 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     public function fc_display_submission_form() {
         // Only show the form to logged-in users (optional)
         // Uncomment the following lines if you want to restrict to logged-in users
-        /*
+        
         if ( ! is_user_logged_in() ) {
             return '<p>' . __( 'You need to be logged in to submit a Fart Detail.', 'fart-calculator' ) . '</p>';
         }
-        */
+    
 
         ob_start();
 

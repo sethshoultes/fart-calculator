@@ -20,17 +20,21 @@ get_header();
     ?>
 
     <div class="fc-fart-joke-voting">
+        
         <div class="fc-fart-joke-votes">
-            <span class="fc-fart-joke-upvotes"><strong>👍 Upvotes:</strong> <?php echo esc_html( $upvotes ); ?></span>
-            <span class="fc-fart-joke-downvotes"><strong>👎 Downvotes:</strong> <?php echo esc_html( $downvotes ); ?></span>
-        </div>
+            <?php
+            $upvotes = get_post_meta( get_the_ID(), '_fc_fart_joke_upvotes', true );
+            $downvotes = get_post_meta( get_the_ID(), '_fc_fart_joke_downvotes', true );
 
-        <?php if ( is_user_logged_in() ) : ?>
-            <button class="fc-vote-button fc-upvote" data-joke-id="<?php echo esc_attr( get_the_ID() ); ?>" data-vote-type="upvote">👍 Upvote</button>
-            <button class="fc-vote-button fc-downvote" data-joke-id="<?php echo esc_attr( get_the_ID() ); ?>" data-vote-type="downvote">👎 Downvote</button>
-        <?php else : ?>
-            <p>You must be logged in to vote.</p>
-        <?php endif; ?>
+            $upvotes = $upvotes ? $upvotes : 0;
+            $downvotes = $downvotes ? $downvotes : 0;
+            ?>
+            <p><strong>👍 Upvotes:</strong> <?php echo esc_html( $upvotes ); ?> <br><button class="fc-vote-button fc-upvote" data-joke-id="<?php echo esc_attr( get_the_ID() ); ?>" data-vote-type="upvote">👍 Upvote</button></p>
+            <p><strong>👎 Downvotes:</strong> <?php echo esc_html( $downvotes ); ?> <br><button class="fc-vote-button fc-downvote" data-joke-id="<?php echo esc_attr( get_the_ID() ); ?>" data-vote-type="downvote">👎 Downvote</button></p>
+
+            
+            
+        </div>
         <div class="fc-fart-joke-meta">
             <p class="fc-fart-joke-categories">
                 <strong>Categories: </strong>
