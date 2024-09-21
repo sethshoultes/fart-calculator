@@ -1,0 +1,199 @@
+/* Fart Calculator Styles */
+
+/* Fart Calculator Form */
+#fc-fart-calculator-form label,
+#fc-fart-detail-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#fc-fart-calculator-form input[type="number"],
+#fc-fart-calculator-form input[type="text"],
+#fc-fart-calculator-form select,
+#fc-fart-calculator-form textarea,
+#fc-fart-detail-form input[type="text"],
+#fc-fart-detail-form input[type="number"],
+#fc-fart-detail-form select,
+#fc-fart-detail-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+#fc-fart-calculator-form input[type="submit"],
+#fc-fart-detail-form input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #0073aa;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#fc-fart-calculator-form input[type="submit"]:hover,
+#fc-fart-detail-form input[type="submit"]:hover {
+    background-color: #005177;
+}
+
+/* Fart Details List */
+.fc-fart-details-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.fc-fart-detail {
+    flex: 1 1 calc(33.333% - 20px);
+    border: 1px solid #ccc;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    transition: transform 0.3s;
+}
+
+.fc-fart-detail:hover {
+    transform: scale(1.05);
+}
+
+.fc-fart-detail h3 {
+    margin-top: 0;
+}
+
+.fc-fart-detail a {
+    text-decoration: none;
+    color: #0073aa;
+}
+
+.fc-fart-detail a:hover {
+    text-decoration: underline;
+}
+.fc-fart-description {
+    margin-top: 10px;
+    font-style: italic;
+    color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .fc-fart-detail {
+        flex: 1 1 calc(50% - 20px);
+    }
+}
+
+@media (max-width: 600px) {
+    .fc-fart-detail {
+        flex: 1 1 100%;
+    }
+}
+
+/* Fart Ranker Styles */
+.fc-fart-ranker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.fc-fart-ranker-item {
+    flex: 1 1 calc(33.333% - 20px);
+    border: 1px solid #ccc;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-radius: 5px;
+    transition: transform 0.3s;
+}
+
+.fc-fart-ranker-item:hover {
+    transform: scale(1.05);
+}
+
+.fc-fart-ranker-item h3 {
+    margin-top: 0;
+}
+
+.fc-fart-ranker-item p {
+    margin: 5px 0;
+}
+
+.fc-rate-button {
+    padding: 8px 12px;
+    background-color: #ff6600;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.fc-rate-button:hover {
+    background-color: #cc5200;
+}
+
+/* Rating Modal Styles */
+#fc-rating-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fc-rating-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+}
+
+.fc-close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Calculator Results */
+.fc-calculation-results {
+    border: 1px solid #28a745;
+    background-color: #e6ffe6;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.fc-calculation-results h2 {
+    color: #155724;
+}
+
+.fc-calculation-results h3 {
+    color: #155724;
+}
+
+.fc-calculation-results p {
+    margin: 5px 0;
+}
+
+/* Submission Form Feedback */
+.fc-submission-success {
+    color: green;
+}
+
+.fc-submission-error {
+    color: red;
+}
+
+.fc-submission-errors ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
