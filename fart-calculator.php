@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Fart Calculator
  * Description: A fun calculator that estimates fart frequency based on user inputs, with detailed rankings and front-end submission.
- * Version: 1.6
+ * Version: 1.7 
  * Author: Your Name
  * License: GPL2
  */
@@ -537,7 +537,6 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     }
     
     // Handle AJAX Upvote/Downvote for Fart Jokes
-    // Handle AJAX Upvote/Downvote for Fart Jokes
     function fc_handle_fart_joke_vote() {
         if ( ! is_user_logged_in() ) {
             wp_send_json_error( __( 'You must be logged in to vote.', 'fart-calculator' ) );
@@ -576,8 +575,6 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
         wp_send_json_success( __( 'Vote recorded successfully.', 'fart-calculator' ) );
     }
-
-// Similar function for fart details...
 
 
     /**
@@ -1275,4 +1272,3 @@ endif; // End of class_exists check
 
 //Todo:
 //Create a fart analytics based on fart calculator submissions 
-?>
