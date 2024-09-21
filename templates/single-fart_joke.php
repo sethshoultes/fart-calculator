@@ -31,6 +31,17 @@ get_header();
         <?php else : ?>
             <p>You must be logged in to vote.</p>
         <?php endif; ?>
+        <div class="fc-fart-joke-meta">
+            <p class="fc-fart-joke-categories">
+                <strong>Categories: </strong>
+                <?php echo get_the_term_list( get_the_ID(), 'fart_joke_category', '', ', ' ); ?>
+            </p>
+            
+            <p class="fc-fart-joke-tags">
+                <strong>Tags: </strong>
+                <?php echo get_the_term_list( get_the_ID(), 'fart_joke_tag', '', ', ' ); ?>
+            </p>
+        </div>
     </div>
 </div>
 

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Fart Calculator
  * Description: A fun calculator that estimates fart frequency based on user inputs, with detailed rankings and front-end submission.
- * Version: 1.5
+ * Version: 1.6
  * Author: Your Name
  * License: GPL2
  */
@@ -25,10 +25,16 @@ class Fart_Calculator {
     public function __construct() {
         // Register Fart Details Custom Post Type
         add_action( 'init', array( $this, 'fc_register_fart_detail_cpt' ), 0 );
+        add_action( 'init', array( $this, 'fc_register_fart_detail_category_taxonomy' ), 0 );
+        add_action( 'init', array( $this, 'fc_register_fart_detail_tag_taxonomy' ), 0 );
+
          
         // Register Fart Jokes Custom Post Type
         add_action( 'init', array( $this, 'fc_register_fart_joke_cpt' ) );
         add_action( 'init', array( $this, 'fc_add_fart_joke_votes_meta') );
+        add_action( 'init', array( $this, 'fc_register_fart_joke_category_taxonomy' ), 0 );
+        add_action( 'init', array( $this, 'fc_register_fart_joke_tag_taxonomy' ), 0 );
+
 
 
         // Add Meta Boxes
@@ -129,6 +135,65 @@ class Fart_Calculator {
         register_post_type( 'fart_detail', $args );
     }
 
+    // Register Category Taxonomy for Fart Details
+    public function fc_register_fart_detail_category_taxonomy() {
+        $labels = array(
+            'name'              => _x( 'Fart Detail Categories', 'taxonomy general name', 'fart-calculator' ),
+            'singular_name'     => _x( 'Fart Detail Category', 'taxonomy singular name', 'fart-calculator' ),
+            'search_items'      => __( 'Search Categories', 'fart-calculator' ),
+            'all_items'         => __( 'All Categories', 'fart-calculator' ),
+            'parent_item'       => __( 'Parent Category', 'fart-calculator' ),
+            'parent_item_colon' => __( 'Parent Category:', 'fart-calculator' ),
+            'edit_item'         => __( 'Edit Category', 'fart-calculator' ),
+            'update_item'       => __( 'Update Category', 'fart-calculator' ),
+            'add_new_item'      => __( 'Add New Category', 'fart-calculator' ),
+            'new_item_name'     => __( 'New Category Name', 'fart-calculator' ),
+            'menu_name'         => __( 'Categories', 'fart-calculator' ),
+        );
+
+        $args = array(
+            'hierarchical'      => true, // Categories are hierarchical
+            'labels'            => $labels,
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'query_var'         => true,
+            'rewrite'           => array( 'slug' => 'fart-detail-category' ),
+        );
+
+        register_taxonomy( 'fart_detail_category', array( 'fart_detail' ), $args );
+    }
+    // Register Tag Taxonomy for Fart Details
+    public function fc_register_fart_detail_tag_taxonomy() {
+        $labels = array(
+            'name'                       => _x( 'Fart Detail Tags', 'taxonomy general name', 'fart-calculator' ),
+            'singular_name'              => _x( 'Fart Detail Tag', 'taxonomy singular name', 'fart-calculator' ),
+            'search_items'               => __( 'Search Tags', 'fart-calculator' ),
+            'popular_items'              => __( 'Popular Tags', 'fart-calculator' ),
+            'all_items'                  => __( 'All Tags', 'fart-calculator' ),
+            'edit_item'                  => __( 'Edit Tag', 'fart-calculator' ),
+            'update_item'                => __( 'Update Tag', 'fart-calculator' ),
+            'add_new_item'               => __( 'Add New Tag', 'fart-calculator' ),
+            'new_item_name'              => __( 'New Tag Name', 'fart-calculator' ),
+            'separate_items_with_commas' => __( 'Separate tags with commas', 'fart-calculator' ),
+            'add_or_remove_items'        => __( 'Add or remove tags', 'fart-calculator' ),
+            'choose_from_most_used'      => __( 'Choose from the most used tags', 'fart-calculator' ),
+            'menu_name'                  => __( 'Tags', 'fart-calculator' ),
+        );
+
+        $args = array(
+            'hierarchical'          => false, // Tags are not hierarchical
+            'labels'                => $labels,
+            'show_ui'               => true,
+            'show_admin_column'     => true,
+            'update_count_callback' => '_update_post_term_count',
+            'query_var'             => true,
+            'rewrite'               => array( 'slug' => 'fart-detail-tag' ),
+        );
+
+        register_taxonomy( 'fart_detail_tag', array( 'fart_detail' ), $args );
+    }
+
+
     // Register Fart Joke CPT// Register Fart Jokes CPT
     public function fc_register_fart_joke_cpt() {
         $labels = array(
@@ -165,6 +230,65 @@ class Fart_Calculator {
 
         register_post_type( 'fart_joke', $args );
     }
+    // Register Category Taxonomy for Fart Jokes
+    public function fc_register_fart_joke_category_taxonomy() {
+        $labels = array(
+            'name'              => _x( 'Fart Joke Categories', 'taxonomy general name', 'fart-calculator' ),
+            'singular_name'     => _x( 'Fart Joke Category', 'taxonomy singular name', 'fart-calculator' ),
+            'search_items'      => __( 'Search Categories', 'fart-calculator' ),
+            'all_items'         => __( 'All Categories', 'fart-calculator' ),
+            'parent_item'       => __( 'Parent Category', 'fart-calculator' ),
+            'parent_item_colon' => __( 'Parent Category:', 'fart-calculator' ),
+            'edit_item'         => __( 'Edit Category', 'fart-calculator' ),
+            'update_item'       => __( 'Update Category', 'fart-calculator' ),
+            'add_new_item'      => __( 'Add New Category', 'fart-calculator' ),
+            'new_item_name'     => __( 'New Category Name', 'fart-calculator' ),
+            'menu_name'         => __( 'Categories', 'fart-calculator' ),
+        );
+
+        $args = array(
+            'hierarchical'      => true, // Categories are hierarchical
+            'labels'            => $labels,
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'query_var'         => true,
+            'rewrite'           => array( 'slug' => 'fart-joke-category' ),
+        );
+
+        register_taxonomy( 'fart_joke_category', array( 'fart_joke' ), $args );
+    }
+    // Register Tag Taxonomy for Fart Jokes
+    public function fc_register_fart_joke_tag_taxonomy() {
+        $labels = array(
+            'name'                       => _x( 'Fart Joke Tags', 'taxonomy general name', 'fart-calculator' ),
+            'singular_name'              => _x( 'Fart Joke Tag', 'taxonomy singular name', 'fart-calculator' ),
+            'search_items'               => __( 'Search Tags', 'fart-calculator' ),
+            'popular_items'              => __( 'Popular Tags', 'fart-calculator' ),
+            'all_items'                  => __( 'All Tags', 'fart-calculator' ),
+            'edit_item'                  => __( 'Edit Tag', 'fart-calculator' ),
+            'update_item'                => __( 'Update Tag', 'fart-calculator' ),
+            'add_new_item'               => __( 'Add New Tag', 'fart-calculator' ),
+            'new_item_name'              => __( 'New Tag Name', 'fart-calculator' ),
+            'separate_items_with_commas' => __( 'Separate tags with commas', 'fart-calculator' ),
+            'add_or_remove_items'        => __( 'Add or remove tags', 'fart-calculator' ),
+            'choose_from_most_used'      => __( 'Choose from the most used tags', 'fart-calculator' ),
+            'menu_name'                  => __( 'Tags', 'fart-calculator' ),
+        );
+
+        $args = array(
+            'hierarchical'          => false, // Tags are not hierarchical
+            'labels'                => $labels,
+            'show_ui'               => true,
+            'show_admin_column'     => true,
+            'update_count_callback' => '_update_post_term_count',
+            'query_var'             => true,
+            'rewrite'               => array( 'slug' => 'fart-joke-tag' ),
+        );
+
+        register_taxonomy( 'fart_joke_tag', array( 'fart_joke' ), $args );
+    }
+
+
 
 
     /**
