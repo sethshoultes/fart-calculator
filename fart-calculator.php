@@ -3,7 +3,7 @@
  * Plugin Name: Fart Calculator
  * Description: A fun calculator that estimates fart frequency based on user inputs, with detailed rankings and front-end submission.
  * Version: 1.7 
- * Author: Your Name
+ * Author: Seth Shoultes
  * License: GPL2
  */
 
@@ -11,6 +11,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+
+require_once plugin_dir_path( __FILE__ ) . 'includes/rest-api.php';
+
 
 /**
  * Main Plugin Class
@@ -77,6 +80,9 @@ class Fart_Calculator {
         add_action( hook_name: 'wp_ajax_nopriv_fc_fart_joke_vote', callback: array( $this, 'fc_handle_fart_joke_vote' ) );
         add_action( 'wp_ajax_fc_fart_detail_vote', array( $this, 'fc_handle_fart_detail_vote' ) );
         add_action( 'wp_ajax_nopriv_fc_fart_detail_vote', array( $this, 'fc_handle_fart_detail_vote' ) );
+
+         // Register the REST API routes
+       // add_action( 'rest_api_init', 'fc_register_fart_rest_api_routes' );
     }
 
     /**
@@ -1127,8 +1133,6 @@ public function fc_add_fart_detail_votes_meta() {
     }
     
    
-    
-
     // Shortcode to Display Fart Joke Leaderboard
     public function fc_fart_joke_leaderboard() {
         ob_start();
@@ -1172,10 +1176,6 @@ public function fc_add_fart_detail_votes_meta() {
     
         return ob_get_clean();
     }
-    
-
-
-
 
     /**
      * Handles AJAX Submission of Fart Ratings.
@@ -1217,7 +1217,7 @@ public function fc_add_fart_detail_votes_meta() {
     }
 
     /**
-     * Loads the Custom Template for Single Fart Detail.
+     * Loads the Custom Templates for Single Fart Detail and Single Fart Joke.
      */
     public function fc_load_fart_detail_template( $template ) {
         if ( is_singular( 'fart_detail' ) ) {
@@ -1239,6 +1239,30 @@ public function fc_add_fart_detail_votes_meta() {
         }
         return $template;
     }
+
+    function fc_register_fart_rest_api_routes() {
+        // Route for getting all fart details
+        register_rest_route( 'fart-calculator/v1', '/farts/', array(
+            'methods' => 'GET',
+            'callback' => 'fc_get_all_fart_details',
+            'permission_callback' => '__return_true', // No authentication required
+        ) );
+
+        // Route for getting a single fart detail by ID
+        register_rest_route( 'fart-calculator/v1', '/farts/(?P<id>\d+)', array(
+            'methods' => 'GET',
+            'callback' => 'fc_get_single_fart_detail',
+            'permission_callback' => '__return_true', // No authentication required
+        ) );
+
+        // Route for submitting a vote (upvote/downvote)
+        register_rest_route( 'fart-calculator/v1', '/farts/(?P<id>\d+)/vote/', array(
+            'methods' => 'POST',
+            'callback' => 'fc_submit_fart_vote',
+            'permission_callback' => 'fc_validate_vote_request', // Optionally require authentication
+        ) );
+    }
+
 
 } // End of Fart_Calculator class
 
