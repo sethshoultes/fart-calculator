@@ -433,7 +433,7 @@ class Fart_Calculator {
             callback: array( $this, 'fc_fart_joke_rating_callback' ),
             screen: 'fart_joke',
             context: 'side',
-            priority: 'default'
+            priority: 'high'
         );
     }
 
@@ -618,16 +618,16 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     }
 
     // Add Meta Boxes for Voting in Fart Details
-public function fc_add_fart_detail_votes_meta() {
-    add_meta_box(
-        'fc_fart_detail_votes_meta',
-        __( 'Fart Detail Votes', 'fart-calculator' ),
-        array( $this, 'fc_fart_detail_votes_meta_callback' ),
-        'fart_detail', // Make sure this is the correct post type
-        'side',
-        'high'
-    );
-}
+    public function fc_add_fart_detail_votes_meta() {
+        add_meta_box(
+            'fc_fart_detail_votes_meta',
+            __( 'Fart Profile Votes', 'fart-calculator' ),
+            array( $this, 'fc_fart_detail_votes_meta_callback' ),
+            'fart_detail', // Make sure this is the correct post type
+            'side',
+            'high'
+        );
+    }
 
     // Callback to display voting meta data in the admin
     public function fc_fart_detail_votes_meta_callback( $post ) {
