@@ -89,22 +89,22 @@ class Fart_Calculator {
      */
     public function fc_register_fart_detail_cpt() {
         $labels = array(
-            'name'                  => _x( 'Fart Profiles', 'Post Type General Name', 'fart-calculator' ),
-            'singular_name'         => _x( 'Fart Profile', 'Post Type Singular Name', 'fart-calculator' ),
-            'menu_name'             => __( 'Fart Profiles', 'fart-calculator' ),
-            'name_admin_bar'        => __( 'Fart Profile', 'fart-calculator' ),
+            'name'                  => _x( 'Fart Details', 'Post Type General Name', 'fart-calculator' ),
+            'singular_name'         => _x( 'Fart Detail', 'Post Type Singular Name', 'fart-calculator' ),
+            'menu_name'             => __( 'Fart Details', 'fart-calculator' ),
+            'name_admin_bar'        => __( 'Fart Detail', 'fart-calculator' ),
             'archives'              => __( 'Fart Archives', 'fart-calculator' ),
             'attributes'            => __( 'Fart Attributes', 'fart-calculator' ),
             'parent_item_colon'     => __( 'Parent Fart:', 'fart-calculator' ),
-            'all_items'             => __( 'All Fart Profiles', 'fart-calculator' ),
+            'all_items'             => __( 'All Fart Details', 'fart-calculator' ),
             'add_new_item'          => __( 'Add New Fart Detail', 'fart-calculator' ),
-            'add_new'               => __( 'Add New Profile', 'fart-calculator' ),
-            'new_item'              => __( 'New Fart Profile', 'fart-calculator' ),
-            'edit_item'             => __( 'Edit Fart Profile', 'fart-calculator' ),
-            'update_item'           => __( 'Update Fart Profile', 'fart-calculator' ),
-            'view_item'             => __( 'View Fart Profile', 'fart-calculator' ),
-            'view_items'            => __( 'View Fart Profiles', 'fart-calculator' ),
-            'search_items'          => __( 'Search Fart Profile', 'fart-calculator' ),
+            'add_new'               => __( 'Add New Detail', 'fart-calculator' ),
+            'new_item'              => __( 'New Fart Detail', 'fart-calculator' ),
+            'edit_item'             => __( 'Edit Fart Detail', 'fart-calculator' ),
+            'update_item'           => __( 'Update Fart Detail', 'fart-calculator' ),
+            'view_item'             => __( 'View Fart Detail', 'fart-calculator' ),
+            'view_items'            => __( 'View Fart Details', 'fart-calculator' ),
+            'search_items'          => __( 'Search Fart Detail', 'fart-calculator' ),
             'not_found'             => __( 'Not found', 'fart-calculator' ),
             'not_found_in_trash'    => __( 'Not found in Trash', 'fart-calculator' ),
             'featured_image'        => __( 'Fart Image', 'fart-calculator' ),
@@ -118,8 +118,8 @@ class Fart_Calculator {
             'filter_items_list'     => __( 'Filter fart details list', 'fart-calculator' ),
         );
         $args = array(
-            'label'                 => __( 'Fart Profile', 'fart-calculator' ),
-            'description'           => __( 'Profiles and rankings for farts', 'fart-calculator' ),
+            'label'                 => __( 'Fart Detail', 'fart-calculator' ),
+            'description'           => __( 'Details and rankings for farts', 'fart-calculator' ),
             'labels'                => $labels,
             'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
             'hierarchical'          => false,
@@ -148,8 +148,8 @@ class Fart_Calculator {
     // Register Category Taxonomy for Fart Details
     public function fc_register_fart_detail_category_taxonomy() {
         $labels = array(
-            'name'              => _x( 'Fart Profile Categories', 'taxonomy general name', 'fart-calculator' ),
-            'singular_name'     => _x( 'Fart Profile Category', 'taxonomy singular name', 'fart-calculator' ),
+            'name'              => _x( 'Fart Detail Categories', 'taxonomy general name', 'fart-calculator' ),
+            'singular_name'     => _x( 'Fart Detail Category', 'taxonomy singular name', 'fart-calculator' ),
             'search_items'      => __( 'Search Categories', 'fart-calculator' ),
             'all_items'         => __( 'All Categories', 'fart-calculator' ),
             'parent_item'       => __( 'Parent Category', 'fart-calculator' ),
@@ -175,8 +175,8 @@ class Fart_Calculator {
     // Register Tag Taxonomy for Fart Details
     public function fc_register_fart_detail_tag_taxonomy() {
         $labels = array(
-            'name'                       => _x( 'Fart Profile Tags', 'taxonomy general name', 'fart-calculator' ),
-            'singular_name'              => _x( 'Fart Profile Tag', 'taxonomy singular name', 'fart-calculator' ),
+            'name'                       => _x( 'Fart Detail Tags', 'taxonomy general name', 'fart-calculator' ),
+            'singular_name'              => _x( 'Fart Detail Tag', 'taxonomy singular name', 'fart-calculator' ),
             'search_items'               => __( 'Search Tags', 'fart-calculator' ),
             'popular_items'              => __( 'Popular Tags', 'fart-calculator' ),
             'all_items'                  => __( 'All Tags', 'fart-calculator' ),
@@ -621,7 +621,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     public function fc_add_fart_detail_votes_meta() {
         add_meta_box(
             'fc_fart_detail_votes_meta',
-            __( 'Fart Profile Votes', 'fart-calculator' ),
+            __( 'Fart Detail Votes', 'fart-calculator' ),
             array( $this, 'fc_fart_detail_votes_meta_callback' ),
             'fart_detail', // Make sure this is the correct post type
             'side',
