@@ -4,6 +4,30 @@ You can test the endpoints using tools like Postman or directly in the browser f
 
 To get all farts: https://your-site.com/wp-json/fart-calculator/v1/farts/
 To get a specific fart detail: https://your-site.com/wp-json/fart-calculator/v1/farts/123
+
+API Endpoint for Submitting a Vote: https://your-site.com/wp-json/fart-calculator/v1/farts/123/vote/
+Required Parameters:
+id: The ID of the fart detail that you want to vote on.
+vote_type: The type of vote, either "upvote" or "downvote".
+
+Example Request Body:
+You’ll send this in the body of your POST request.
+{
+  "vote_type": "upvote"  // or "downvote"
+}
+
+Sample POST Request Using curl:
+bash
+curl -X POST https://your-site.com/wp-json/fart-calculator/v1/farts/123/vote/ \
+    -H "Content-Type: application/json" \
+    -d '{"vote_type": "upvote"}'
+
+Response:
+If the request is successful, the API will respond with a JSON object similar to this:
+{
+  "message": "Upvote recorded successfully.",
+  "total_votes": 5  // Updated number of upvotes
+}
 */
 
 // Register the REST API routes
