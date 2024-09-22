@@ -27,7 +27,7 @@ class Fart_Calculator {
      * Constructor: Initializes the plugin by setting up hooks.
      */
     public function __construct() {
-        // Register Fart Details Custom Post Type
+        // Register Fart Brands Custom Post Type
         add_action( hook_name: 'init', callback: array( $this, 'fc_register_fart_detail_cpt' ), priority: 0 );
         add_action( hook_name: 'init', callback: array( $this, 'fc_register_fart_detail_category_taxonomy' ), priority: 0 );
         add_action( hook_name: 'init', callback: array( $this, 'fc_register_fart_detail_tag_taxonomy' ), priority: 0 );
@@ -89,22 +89,22 @@ class Fart_Calculator {
      */
     public function fc_register_fart_detail_cpt() {
         $labels = array(
-            'name'                  => _x( 'Fart Details', 'Post Type General Name', 'fart-calculator' ),
-            'singular_name'         => _x( 'Fart Detail', 'Post Type Singular Name', 'fart-calculator' ),
-            'menu_name'             => __( 'Fart Details', 'fart-calculator' ),
-            'name_admin_bar'        => __( 'Fart Detail', 'fart-calculator' ),
+            'name'                  => _x( 'Fart Brands', 'Post Type General Name', 'fart-calculator' ),
+            'singular_name'         => _x( 'Fart Brand', 'Post Type Singular Name', 'fart-calculator' ),
+            'menu_name'             => __( 'Fart Brands', 'fart-calculator' ),
+            'name_admin_bar'        => __( 'Fart Brand', 'fart-calculator' ),
             'archives'              => __( 'Fart Archives', 'fart-calculator' ),
             'attributes'            => __( 'Fart Attributes', 'fart-calculator' ),
             'parent_item_colon'     => __( 'Parent Fart:', 'fart-calculator' ),
-            'all_items'             => __( 'All Fart Details', 'fart-calculator' ),
-            'add_new_item'          => __( 'Add New Fart Detail', 'fart-calculator' ),
-            'add_new'               => __( 'Add New Detail', 'fart-calculator' ),
-            'new_item'              => __( 'New Fart Detail', 'fart-calculator' ),
-            'edit_item'             => __( 'Edit Fart Detail', 'fart-calculator' ),
-            'update_item'           => __( 'Update Fart Detail', 'fart-calculator' ),
-            'view_item'             => __( 'View Fart Detail', 'fart-calculator' ),
-            'view_items'            => __( 'View Fart Details', 'fart-calculator' ),
-            'search_items'          => __( 'Search Fart Detail', 'fart-calculator' ),
+            'all_items'             => __( 'All Fart Brands', 'fart-calculator' ),
+            'add_new_item'          => __( 'Add New Fart Brand', 'fart-calculator' ),
+            'add_new'               => __( 'Add New Brand', 'fart-calculator' ),
+            'new_item'              => __( 'New Fart Brand', 'fart-calculator' ),
+            'edit_item'             => __( 'Edit Fart Brand', 'fart-calculator' ),
+            'update_item'           => __( 'Update Fart Brand', 'fart-calculator' ),
+            'view_item'             => __( 'View Fart Brand', 'fart-calculator' ),
+            'view_items'            => __( 'View Fart Brands', 'fart-calculator' ),
+            'search_items'          => __( 'Search Fart Brand', 'fart-calculator' ),
             'not_found'             => __( 'Not found', 'fart-calculator' ),
             'not_found_in_trash'    => __( 'Not found in Trash', 'fart-calculator' ),
             'featured_image'        => __( 'Fart Image', 'fart-calculator' ),
@@ -113,13 +113,13 @@ class Fart_Calculator {
             'use_featured_image'    => __( 'Use as fart image', 'fart-calculator' ),
             'insert_into_item'      => __( 'Insert into fart', 'fart-calculator' ),
             'uploaded_to_this_item' => __( 'Uploaded to this fart', 'fart-calculator' ),
-            'items_list'            => __( 'Fart details list', 'fart-calculator' ),
-            'items_list_navigation' => __( 'Fart details list navigation', 'fart-calculator' ),
-            'filter_items_list'     => __( 'Filter fart details list', 'fart-calculator' ),
+            'items_list'            => __( 'Fart brands list', 'fart-calculator' ),
+            'items_list_navigation' => __( 'Fart brands list navigation', 'fart-calculator' ),
+            'filter_items_list'     => __( 'Filter fart brands list', 'fart-calculator' ),
         );
         $args = array(
-            'label'                 => __( 'Fart Detail', 'fart-calculator' ),
-            'description'           => __( 'Details and rankings for farts', 'fart-calculator' ),
+            'label'                 => __( 'Fart Brand', 'fart-calculator' ),
+            'description'           => __( 'Brands and rankings for farts', 'fart-calculator' ),
             'labels'                => $labels,
             'supports'              => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
             'hierarchical'          => false,
@@ -145,11 +145,11 @@ class Fart_Calculator {
         register_post_type( 'fart_detail', $args );
     }
 
-    // Register Category Taxonomy for Fart Details
+    // Register Category Taxonomy for Fart Brands
     public function fc_register_fart_detail_category_taxonomy() {
         $labels = array(
-            'name'              => _x( 'Fart Detail Categories', 'taxonomy general name', 'fart-calculator' ),
-            'singular_name'     => _x( 'Fart Detail Category', 'taxonomy singular name', 'fart-calculator' ),
+            'name'              => _x( 'Fart Brand Categories', 'taxonomy general name', 'fart-calculator' ),
+            'singular_name'     => _x( 'Fart Brand Category', 'taxonomy singular name', 'fart-calculator' ),
             'search_items'      => __( 'Search Categories', 'fart-calculator' ),
             'all_items'         => __( 'All Categories', 'fart-calculator' ),
             'parent_item'       => __( 'Parent Category', 'fart-calculator' ),
@@ -172,11 +172,11 @@ class Fart_Calculator {
 
         register_taxonomy( 'fart_detail_category', array( 'fart_detail' ), $args );
     }
-    // Register Tag Taxonomy for Fart Details
+    // Register Tag Taxonomy for Fart Brands
     public function fc_register_fart_detail_tag_taxonomy() {
         $labels = array(
-            'name'                       => _x( 'Fart Detail Tags', 'taxonomy general name', 'fart-calculator' ),
-            'singular_name'              => _x( 'Fart Detail Tag', 'taxonomy singular name', 'fart-calculator' ),
+            'name'                       => _x( 'Fart Brand Tags', 'taxonomy general name', 'fart-calculator' ),
+            'singular_name'              => _x( 'Fart Brand Tag', 'taxonomy singular name', 'fart-calculator' ),
             'search_items'               => __( 'Search Tags', 'fart-calculator' ),
             'popular_items'              => __( 'Popular Tags', 'fart-calculator' ),
             'all_items'                  => __( 'All Tags', 'fart-calculator' ),
@@ -302,7 +302,7 @@ class Fart_Calculator {
 
 
     /**
-     * Adds Meta Boxes for Fart Details.
+     * Adds Meta Boxes for Fart Brands.
      */
     public function fc_add_fart_detail_meta_boxes() {
         // Volume Meta Box
@@ -583,7 +583,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
 
     /**
-     * Sets Custom Columns for Fart Details CPT.
+     * Sets Custom Columns for Fart Brands CPT.
      */
     public function fc_set_custom_fart_detail_columns( $columns ) {
         unset( $columns['date'] );
@@ -617,11 +617,11 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         }
     }
 
-    // Add Meta Boxes for Voting in Fart Details
+    // Add Meta Boxes for Voting in Fart Brands
     public function fc_add_fart_detail_votes_meta() {
         add_meta_box(
             'fc_fart_detail_votes_meta',
-            __( 'Fart Detail Votes', 'fart-calculator' ),
+            __( 'Fart Brand Votes', 'fart-calculator' ),
             array( $this, 'fc_fart_detail_votes_meta_callback' ),
             'fart_detail', // Make sure this is the correct post type
             'side',
@@ -665,7 +665,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             update_post_meta( $post_id, '_fc_fart_detail_downvotes', intval( $_POST['fc_fart_detail_downvotes'] ) );
         }
     }
-    // Handle AJAX Upvote/Downvote for Fart Details
+    // Handle AJAX Upvote/Downvote for Fart Brands
     public function fc_handle_fart_detail_vote() {
         // Check if the user is logged in
         if ( ! is_user_logged_in() ) {
@@ -673,24 +673,24 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         }
 
         if ( ! check_ajax_referer( 'fc_vote_nonce', 'nonce', false ) ) {
-            wp_send_json_error( __( 'Nonce verification failed for Fart Detail.', 'fart-calculator' ) );
+            wp_send_json_error( __( 'Nonce verification failed for Fart Brand.', 'fart-calculator' ) );
         }
         $detail_id = intval( $_POST['fart_id'] );
         $vote_type = sanitize_text_field( $_POST['vote_type'] );
         $user_id = get_current_user_id(); // Get the logged-in user's ID
 
         if ( ! in_array( $vote_type, array( 'upvote', 'downvote' ), true ) || ! $detail_id ) {
-            wp_send_json_error( __( 'Invalid vote type or detail ID.', 'fart-calculator' ) );
+            wp_send_json_error( __( 'Invalid vote type or brand ID.', 'fart-calculator' ) );
         }
 
-        // Check if the user has already voted on this fart detail
+        // Check if the user has already voted on this fart brand
         $voters = get_post_meta( $detail_id, '_fc_fart_detail_voters', true );
         if ( ! is_array( $voters ) ) {
             $voters = array();
         }
 
         if ( in_array( $user_id, $voters ) ) {
-            wp_send_json_error( __( 'You have already voted on this fart detail.', 'fart-calculator' ) );
+            wp_send_json_error( __( 'You have already voted on this fart brand.', 'fart-calculator' ) );
         }
 
         // Record the user's vote
@@ -761,7 +761,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     }
 
     /**
-     * Shortcode to Display a List of Fart Details.
+     * Shortcode to Display a List of Fart Brands.
      */
    public function fc_display_fart_details_list( $atts ) {
     ob_start();
@@ -771,7 +771,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         'columns' => '3',
     ), $atts, 'fart_details_list' );
 
-    // Query Fart Details
+    // Query Fart Brands
     $fart_details = get_posts( array(
         'post_type'      => 'fart_detail',
         'posts_per_page' => -1,
@@ -807,14 +807,14 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
 
     /**
-     * Shortcode to Display Front-End Fart Detail Submission Form.
+     * Shortcode to Display Front-End Fart Brand Submission Form.
      */
     public function fc_display_submission_form() {
         // Only show the form to logged-in users (optional)
         // Uncomment the following lines if you want to restrict to logged-in users
         
         if ( ! is_user_logged_in() ) {
-            return '<p>' . __( 'You need to be logged in to submit a Fart Detail.', 'fart-calculator' ) . '</p>';
+            return '<p>' . __( 'You need to be logged in to submit a Fart Brand.', 'fart-calculator' ) . '</p>';
         }
     
 
@@ -855,7 +855,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
                     }
                     echo '</ul></div>';
                 } else {
-                    // Create new Fart Detail post
+                    // Create new Fart Brand post
                     $new_fart = array(
                         'post_title'   => $title,
                         'post_content' => $content,
@@ -871,9 +871,9 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
                         update_post_meta( $post_id, '_fc_fart_smell', $smell );
                         update_post_meta( $post_id, '_fc_fart_duration', $duration );
 
-                        echo '<p class="fc-submission-success" style="color:green;">' . __( 'Thank you! Your Fart Detail has been submitted and is awaiting approval.', 'fart-calculator' ) . '</p>';
+                        echo '<p class="fc-submission-success" style="color:green;">' . __( 'Thank you! Your Fart Brand has been submitted and is awaiting approval.', 'fart-calculator' ) . '</p>';
                     } else {
-                        echo '<p class="fc-submission-error" style="color:red;">' . __( 'An error occurred while submitting your Fart Detail. Please try again.', 'fart-calculator' ) . '</p>';
+                        echo '<p class="fc-submission-error" style="color:red;">' . __( 'An error occurred while submitting your Fart Brand. Please try again.', 'fart-calculator' ) . '</p>';
                     }
                 }
             }
@@ -903,7 +903,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             <label for="fc_fart_content"><?php _e( 'Fart Description:', 'fart-calculator' ); ?></label>
             <textarea id="fc_fart_content" name="fc_fart_content" rows="5" required></textarea><br><br>
             
-            <input type="submit" name="fc_fart_detail_submit" value="<?php _e( 'Submit Fart Detail', 'fart-calculator' ); ?>">
+            <input type="submit" name="fc_fart_detail_submit" value="<?php _e( 'Submit Fart Brand', 'fart-calculator' ); ?>">
         </form>
         <?php
 
@@ -916,7 +916,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     public function fc_display_fart_ranker() {
         ob_start();
 
-        // Query Fart Details with average ratings
+        // Query Fart Brands with average ratings
         $fart_details = get_posts( array(
             'post_type'      => 'fart_detail',
             'posts_per_page' => -1,
@@ -1021,7 +1021,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
             <?php
         } else {
-            echo '<p>' . __( 'No Fart Details found. Please add some from the admin panel.', 'fart-calculator' ) . '</p>';
+            echo '<p>' . __( 'No Fart Brands found. Please add some from the admin panel.', 'fart-calculator' ) . '</p>';
         }
 
         return ob_get_clean();
@@ -1195,7 +1195,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         // Check if Fart Detail exists
         $fart = get_post( $fart_id );
         if ( ! $fart || $fart->post_type !== 'fart_detail' ) {
-            wp_send_json_error( __( 'Fart Detail not found.', 'fart-calculator' ) );
+            wp_send_json_error( __( 'Fart Brand not found.', 'fart-calculator' ) );
         }
 
         // Get existing ratings
@@ -1216,7 +1216,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     }
 
     /**
-     * Loads the Custom Templates for Single Fart Detail and Single Fart Joke.
+     * Loads the Custom Templates for Single Fart Brand and Single Fart Joke.
      */
     public function fc_load_fart_detail_template( $template ) {
         if ( is_singular( 'fart_detail' ) ) {
@@ -1240,14 +1240,14 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     }
 
     function fc_register_fart_rest_api_routes() {
-        // Route for getting all fart details
+        // Route for getting all fart brands
         register_rest_route( 'fart-calculator/v1', '/farts/', array(
             'methods' => 'GET',
             'callback' => 'fc_get_all_fart_details',
             'permission_callback' => '__return_true', // No authentication required
         ) );
 
-        // Route for getting a single fart detail by ID
+        // Route for getting a single fart brand by ID
         register_rest_route( 'fart-calculator/v1', '/farts/(?P<id>\d+)', array(
             'methods' => 'GET',
             'callback' => 'fc_get_single_fart_detail',
