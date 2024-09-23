@@ -1239,29 +1239,6 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         return $template;
     }
 
-    function fc_register_fart_rest_api_routes() {
-        // Route for getting all fart brands
-        register_rest_route( 'fart-calculator/v1', '/farts/', array(
-            'methods' => 'GET',
-            'callback' => 'fc_get_all_fart_details',
-            'permission_callback' => '__return_true', // No authentication required
-        ) );
-
-        // Route for getting a single fart brand by ID
-        register_rest_route( 'fart-calculator/v1', '/farts/(?P<id>\d+)', array(
-            'methods' => 'GET',
-            'callback' => 'fc_get_single_fart_detail',
-            'permission_callback' => '__return_true', // No authentication required
-        ) );
-
-        // Route for submitting a vote (upvote/downvote)
-        register_rest_route( 'fart-calculator/v1', '/farts/(?P<id>\d+)/vote/', array(
-            'methods' => 'POST',
-            'callback' => 'fc_submit_fart_vote',
-            'permission_callback' => 'fc_validate_vote_request', // Optionally require authentication
-        ) );
-    }
-
 
 } // End of Fart_Calculator class
 

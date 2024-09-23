@@ -32,28 +32,30 @@ If the request is successful, the API will respond with a JSON object similar to
 
 // Register the REST API routes
 add_action( 'rest_api_init', 'fc_register_fart_rest_api_routes' );
+
 function fc_register_fart_rest_api_routes() {
-    // Route for getting all fart details
-    register_rest_route( 'fart-calculator/v1', '/farts/', array(
-        'methods' => 'GET',
-        'callback' => 'fc_get_all_fart_details',
-        'permission_callback' => '__return_true', // No authentication required
-    ) );
+        // Route for getting all farts
+        register_rest_route( 'fart-calculator/v1', '/farts/', array(
+            'methods' => 'GET',
+            'callback' => 'fc_get_all_fart_details',
+            'permission_callback' => '__return_true', // No authentication required
+        ) );
 
-    // Route for getting a single fart detail by ID
-    register_rest_route( 'fart-calculator/v1', '/farts/(?P<id>\d+)', array(
-        'methods' => 'GET',
-        'callback' => 'fc_get_single_fart_detail',
-        'permission_callback' => '__return_true', // No authentication required
-    ) );
+        // Route for getting a single fart by ID
+        register_rest_route( 'fart-calculator/v1', '/farts/(?P<id>\d+)', array(
+            'methods' => 'GET',
+            'callback' => 'fc_get_single_fart_detail',
+            'permission_callback' => '__return_true', // No authentication required
+        ) );
 
-    // Route for submitting a vote (upvote/downvote)
-    register_rest_route( 'fart-calculator/v1', '/farts/(?P<id>\d+)/vote/', array(
-        'methods' => 'POST',
-        'callback' => 'fc_submit_fart_vote',
-        'permission_callback' => 'fc_validate_vote_request', // Optionally require authentication
-    ) );
-}
+        // Route for submitting a vote (upvote/downvote)
+        register_rest_route( 'fart-calculator/v1', '/farts/(?P<id>\d+)/vote/', array(
+            'methods' => 'POST',
+            'callback' => 'fc_submit_fart_vote',
+            'permission_callback' => 'fc_validate_vote_request', // Optionally require authentication
+        ) );
+    }
+
 
 function fc_get_all_fart_details( $request ) {
     $args = array(
