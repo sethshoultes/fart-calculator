@@ -13,8 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/rest-api.php';
-//require_once plugin_dir_path( __FILE__ ) . 'includes/cpt-fart-details.php';
-
 
 /**
  * Main Plugin Class
@@ -903,7 +901,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             <label for="fc_fart_content"><?php _e( 'Fart Description:', 'fart-calculator' ); ?></label>
             <textarea id="fc_fart_content" name="fc_fart_content" rows="5" required></textarea><br><br>
             
-            <input type="submit" name="fc_fart_detail_submit" value="<?php _e( 'Submit Fart Brand', 'fart-calculator' ); ?>">
+            <input type="submit" name="fc_fart_detail_submit" value="<?php _e( 'Submit Fart', 'fart-calculator' ); ?>">
         </form>
         <?php
 
