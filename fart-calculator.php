@@ -223,11 +223,11 @@ class Fart_Calculator {
             'label'              => __( 'Fart Jokes', 'fart-calculator' ),
             'description'        => __( 'Fart Jokes submitted by users.', 'fart-calculator' ),
             'labels'             => $labels,
-            'supports'           => array( 'title', 'editor' ),
+            'supports'           => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'),
             'public'             => true,
             'show_ui'            => true,
             'show_in_menu'       => true,
-            'menu_position'      => 25.4,
+            'menu_position'      => null,
             'menu_icon'          => 'dashicons-smiley',
             'show_in_admin_bar'  => true,
             'can_export'         => true,
@@ -873,7 +873,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         <form id="fc-fart-detail-form" method="post">
             <?php wp_nonce_field( 'fc_submit_fart_detail', 'fc_fart_detail_nonce' ); ?>
             
-            <label for="fc_fart_title"><?php _e( 'Fart Title:', 'fart-calculator' ); ?></label>
+            <label for="fc_fart_title"><?php _e( 'Fart Brand Title:', 'fart-calculator' ); ?></label>
             <input type="text" id="fc_fart_title" name="fc_fart_title" required><br><br>
             
             <label for="fc_fart_volume"><?php _e( 'Volume:', 'fart-calculator' ); ?></label>
@@ -889,7 +889,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             <label for="fc_fart_duration"><?php _e( 'Duration (seconds):', 'fart-calculator' ); ?></label>
             <input type="number" id="fc_fart_duration" name="fc_fart_duration" min="1" required><br><br>
             
-            <label for="fc_fart_content"><?php _e( 'Fart Description:', 'fart-calculator' ); ?></label>
+            <label for="fc_fart_content"><?php _e( 'Fart Brand Description:', 'fart-calculator' ); ?></label>
             <textarea id="fc_fart_content" name="fc_fart_content" rows="5" required></textarea><br><br>
             
             <input type="submit" name="fc_fart_detail_submit" value="<?php _e( 'Submit Fart', 'fart-calculator' ); ?>">
@@ -1057,59 +1057,105 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     }
     
     //Adds a default upvote value of 0 to fart jokes
-    function fc_initialize_fart_joke_upvotes( $post_id, $post, $update ): void {
+    public function fc_initialize_fart_joke_upvotes( $post_id, $post, $update ): void {
         if ( $post->post_type == 'fart_joke' && ! get_post_meta( post_id: $post_id, key: '_fc_fart_joke_upvotes', single: true ) ) {
             update_post_meta( post_id: $post_id, meta_key: '_fc_fart_joke_upvotes', meta_value: 1 ); // Initialize upvotes if not set
         }
     }
-    // Shortcode for frontend joke submission
-    public function fc_fart_joke_submission_form() {
-        ob_start();
 
-        if ( isset( $_POST['fc_fart_joke_submit'] ) ) {
-            // Nonce check
-            if ( ! isset( $_POST['fc_fart_joke_nonce'] ) || ! wp_verify_nonce( $_POST['fc_fart_joke_nonce'], 'fc_submit_fart_joke' ) ) {
-                echo '<p style="color:red;">' . __( 'Security check failed. Please try again.', 'fart-calculator' ) . '</p>';
-            } else {
-                // Sanitize and submit post
-                $title   = sanitize_text_field( $_POST['fc_fart_joke_title'] );
-                $content = sanitize_textarea_field( $_POST['fc_fart_joke_content'] );
 
-                // Create new post
-                $new_joke = array(
-                    'post_title'   => $title,
-                    'post_content' => $content,
-                    'post_status'  => 'pending',
-                    'post_type'    => 'fart_joke',
-                );
-
-                $post_id = wp_insert_post( $new_joke );
-
-                if ( ! is_wp_error( $post_id ) ) {
-                    echo '<p style="color:green;">' . __( 'Thank you! Your joke has been submitted and is awaiting approval.', 'fart-calculator' ) . '</p>';
-                   
-                    // Trigger hook when a fart joke is submitted
-                    do_action('fc_after_fart_joke_submit', get_current_user_id());
-                } else {
-                    echo '<p style="color:red;">' . __( 'There was an error submitting your joke. Please try again.', 'fart-calculator' ) . '</p>';
-                }
-            }
+    public function fc_handle_image_upload($file_input_name, $post_id) {
+        if (!function_exists('wp_handle_upload')) {
+            require_once(ABSPATH . 'wp-admin/includes/file.php');
         }
 
-        ?>
-        <form method="post">
-            <?php wp_nonce_field( 'fc_submit_fart_joke', 'fc_fart_joke_nonce' ); ?>
-            <label for="fc_fart_joke_title"><?php _e( 'Joke Title', 'fart-calculator' ); ?></label>
-            <input type="text" id="fc_fart_joke_title" name="fc_fart_joke_title" required><br><br>
+        $uploadedfile = $_FILES[$file_input_name];
+        $upload_overrides = array('test_form' => false);
 
-            <label for="fc_fart_joke_content"><?php _e( 'Joke Content', 'fart-calculator' ); ?></label>
-            <textarea id="fc_fart_joke_content" name="fc_fart_joke_content" rows="5" required></textarea><br><br>
-            <input type="submit" name="fc_fart_joke_submit" value="<?php _e( 'Submit Fart Joke', 'fart-calculator' ); ?>">
-        </form>
-        <?php
+        $movefile = wp_handle_upload($uploadedfile, $upload_overrides);
 
-        return ob_get_clean();
+        if ($movefile && !isset($movefile['error'])) {
+            $wp_upload_dir = wp_upload_dir();
+
+            $attachment = array(
+                'guid'           => $wp_upload_dir['url'] . '/' . basename($movefile['file']),
+                'post_mime_type' => $movefile['type'],
+                'post_title'     => preg_replace('/\.[^.]+$/', '', basename($movefile['file'])),
+                'post_content'   => '',
+                'post_status'    => 'inherit'
+            );
+
+            $attachment_id = wp_insert_attachment($attachment, $movefile['file'], $post_id);
+
+            if (!function_exists('wp_generate_attachment_metadata')) {
+                require_once(ABSPATH . 'wp-admin/includes/image.php');
+            }
+
+            $attach_data = wp_generate_attachment_metadata($attachment_id, $movefile['file']);
+            wp_update_attachment_metadata($attachment_id, $attach_data);
+
+            return $attachment_id;
+        } else {
+            return false;
+        }
     }
+    // Shortcode for frontend joke submission
+   
+    public  function fc_fart_joke_submission_form() {
+    ob_start();
+
+    // Check if the form is submitted
+    if (isset($_POST['fc_joke_submit'])) {
+        // Verify nonce
+        if (isset($_POST['fc_joke_nonce']) && wp_verify_nonce($_POST['fc_joke_nonce'], 'fc_submit_joke')) {
+            // Sanitize and validate form data
+            $joke_title = sanitize_text_field($_POST['fc_joke_title']);
+            $joke_content = sanitize_textarea_field($_POST['fc_joke_content']);
+
+            // Insert the joke as a custom post type
+            $joke_id = wp_insert_post(array(
+                'post_title'   => $joke_title,
+                'post_content' => $joke_content,
+                'post_status'  => 'pending',
+                'post_type'    => 'fart_joke',
+            ));
+
+            if ($joke_id) {
+                // Handle image upload
+                if (!empty($_FILES['fc_joke_image']['name'])) {
+                    $attachment_id = $this->fc_handle_image_upload('fc_joke_image', $joke_id);
+                    if ($attachment_id) {
+                        set_post_thumbnail($joke_id, $attachment_id);
+                    }
+                }
+
+                echo '<p class="fc-submission-success" style="color:green;">' . __('Your joke has been submitted successfully!', 'fart-calculator') . '</p>';
+            } else {
+                echo '<p class="fc-submission-error" style="color:red;">' . __('An error occurred while submitting your joke. Please try again.', 'fart-calculator') . '</p>';
+            }
+        }
+    }
+
+    // Display the joke submission form
+    ?>
+    <form id="fc-joke-form" method="post" enctype="multipart/form-data">
+        <?php wp_nonce_field('fc_submit_joke', 'fc_joke_nonce'); ?>
+        
+        <label for="fc_joke_title"><?php _e('Joke Title:', 'fart-calculator'); ?></label>
+        <input type="text" id="fc_joke_title" name="fc_joke_title" required><br><br>
+        
+        <label for="fc_joke_content"><?php _e('Joke Content:', 'fart-calculator'); ?></label>
+        <textarea id="fc_joke_content" name="fc_joke_content" rows="5" required></textarea><br><br>
+        
+        <label for="fc_joke_image"><?php _e('Joke Image:', 'fart-calculator'); ?></label>
+        <input type="file" id="fc_joke_image" name="fc_joke_image" accept="image/*"><br><br>
+        
+        <input type="submit" name="fc_joke_submit" value="<?php _e('Submit Joke', 'fart-calculator'); ?>">
+    </form>
+    <?php
+
+    return ob_get_clean();
+}
 
    
     // Shortcode to Display Fart Joke Leaderboard
