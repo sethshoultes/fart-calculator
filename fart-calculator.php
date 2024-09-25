@@ -7,6 +7,7 @@
  * License: GPL2
  */
 
+
 // Prevent direct access
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -523,7 +524,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     }
     
     // Handle AJAX Upvote/Downvote for Fart Jokes
-    function fc_handle_fart_joke_vote() {
+    public function fc_handle_fart_joke_vote() {
         if ( ! is_user_logged_in() ) {
             wp_send_json_error( __( 'You must be logged in to vote.', 'fart-calculator' ) );
         }
@@ -1129,13 +1130,18 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
                         set_post_thumbnail($joke_id, $attachment_id);
                     }
                 } else {
-                    // Generate image using Leonardo.ai
-                    $image_id = fj_generate_leonardo_image($joke_content, $joke_id);
-                    if (is_wp_error($image_id)) {
-                        echo '<p class="fc-submission-error" style="color:red;">' . $image_id->get_error_message() . '</p>';
+                    if (function_exists('fj_generate_leonardo_image')) {
+                        // Generate image using Leonardo.ai
+                        //error_log('Calling fj_generate_leonardo_image with joke_content: ' . $joke_content . ' and joke_id: ' . $joke_id);
+                        $image_id = fj_generate_leonardo_image($joke_content, $joke_id);
+                        if (is_wp_error($image_id)) {
+                            error_log('Error generating image: ' . $image_id->get_error_message());
+                            echo '<p class="fc-submission-error" style="color:red;">' . $image_id->get_error_message() . '</p>';
+                        } else {
+                            //error_log('Image generated successfully with ID: ' . $image_id);
+                        }
                     }
                 }
-
                 echo '<p class="fc-submission-success" style="color:green;">' . __('Your joke has been submitted successfully!', 'fart-calculator') . '</p>';
             } else {
                 echo '<p class="fc-submission-error" style="color:red;">' . __('An error occurred while submitting your joke. Please try again.', 'fart-calculator') . '</p>';
