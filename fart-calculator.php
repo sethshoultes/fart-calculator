@@ -1099,8 +1099,9 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             return false;
         }
     }
-    // Shortcode for frontend joke submission
-   
+
+
+    // Shortcode for frontend joke submission form 
     public  function fc_fart_joke_submission_form() {
     ob_start();
 
@@ -1126,6 +1127,12 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
                     $attachment_id = $this->fc_handle_image_upload('fc_joke_image', $joke_id);
                     if ($attachment_id) {
                         set_post_thumbnail($joke_id, $attachment_id);
+                    }
+                } else {
+                    // Generate image using Leonardo.ai
+                    $image_id = fj_generate_leonardo_image($joke_content, $joke_id);
+                    if (is_wp_error($image_id)) {
+                        echo '<p class="fc-submission-error" style="color:red;">' . $image_id->get_error_message() . '</p>';
                     }
                 }
 
