@@ -808,7 +808,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
         ob_start();
 
-        // Handle form submission
+        // Handle Fart Brand form submission on the front end
         if ( isset( $_POST['fc_fart_detail_submit'] ) ) {
             // Verify nonce
             if ( ! isset( $_POST['fc_fart_detail_nonce'] ) || ! wp_verify_nonce( $_POST['fc_fart_detail_nonce'], 'fc_submit_fart_detail' ) ) {
@@ -858,6 +858,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
                         update_post_meta( $post_id, '_fc_fart_volume', $volume );
                         update_post_meta( $post_id, '_fc_fart_smell', $smell );
                         update_post_meta( $post_id, '_fc_fart_duration', $duration );
+                        do_action('fc_after_fart_brand_submit', $post_id, get_current_user_id());
 
                         echo '<p class="fc-submission-success" style="color:green;">' . __( 'Thank you! Your Fart Brand has been submitted and is awaiting approval.', 'fart-calculator' ) . '</p>';
                     } else {
@@ -867,7 +868,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             }
         }
 
-        // Display the form
+        // Display the Fart Brand submission form
         ?>
         <form id="fc-fart-detail-form" method="post">
             <?php wp_nonce_field( 'fc_submit_fart_detail', 'fc_fart_detail_nonce' ); ?>
@@ -1086,6 +1087,9 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
                 if ( ! is_wp_error( $post_id ) ) {
                     echo '<p style="color:green;">' . __( 'Thank you! Your joke has been submitted and is awaiting approval.', 'fart-calculator' ) . '</p>';
+                   
+                    // Trigger hook when a fart joke is submitted
+                    do_action('fc_after_fart_joke_submit', get_current_user_id());
                 } else {
                     echo '<p style="color:red;">' . __( 'There was an error submitting your joke. Please try again.', 'fart-calculator' ) . '</p>';
                 }
@@ -1106,19 +1110,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
 
         return ob_get_clean();
     }
-    // Check if the user has already voted on a joke
-    function fc_user_has_voted( $user_id, $joke_id ): bool {
-        // Get the user's votes meta field
-        $user_votes = get_user_meta( $user_id, '_fc_fart_joke_votes', true );
-    
-        // Check if the user has already voted for this joke
-        if ( is_array( $user_votes ) && in_array( $joke_id, $user_votes ) ) {
-            return true; // User has already voted
-        }
-    
-        return false; // User has not voted
-    }
-    
+
    
     // Shortcode to Display Fart Joke Leaderboard
     public function fc_fart_joke_leaderboard() {
