@@ -1328,6 +1328,7 @@ if (has_post_thumbnail()) {
 // Initialize the plugin
 new Fart_Calculator();
 
+
 /**
  * Flush rewrite rules on plugin activation.
  */
@@ -1345,11 +1346,12 @@ function fc_flush_rewrite_rules() {
 /**
  * Flush rewrite rules on plugin deactivation.
  */
-register_deactivation_hook( __FILE__, 'fc_deactivate_flush_rewrite_rules' );
+//register_deactivation_hook( __FILE__, 'fc_deactivate_flush_rewrite_rules' );
 
 function fc_deactivate_flush_rewrite_rules() {
     flush_rewrite_rules();
 }
+
 endif; // End of class_exists check
 
 
