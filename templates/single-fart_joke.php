@@ -9,7 +9,7 @@ get_header();
     // Display the featured image if it exists
     if (has_post_thumbnail()) {
         echo '<div class="fc-fart-joke-thumbnail">';
-        the_post_thumbnail('large');
+        the_post_thumbnail('large'); // Use 'large' size for the thumbnail
         echo '</div>';
     }
     ?>
@@ -30,8 +30,8 @@ get_header();
 
     <div class="fc-fart-joke-voting">
         <div class="fc-fart-joke-votes">
-            <p><strong>👍 Upvotes:</strong> <?php echo esc_html($upvotes); ?> <br><button class="fc-vote-button fc-upvote" data-joke-id="<?php echo esc_attr(get_the_ID()); ?>" data-vote-type="upvote">👍 Upvote</button></p>
-            <p><strong>👎 Downvotes:</strong> <?php echo esc_html($downvotes); ?> <br><button class="fc-vote-button fc-downvote" data-joke-id="<?php echo esc_attr(get_the_ID()); ?>" data-vote-type="downvote">👎 Downvote</button></p>
+            <p><strong>👍 Upvotes:</strong> <?php echo esc_html($upvotes); ?> <br><button class="fc-vote-button fc-upvote" data-joke-id="<?php echo esc_attr(get_the_ID()); ?>" data-vote-type="upvote">Upvote</button></p>
+            <p><strong>👎 Downvotes:</strong> <?php echo esc_html($downvotes); ?> <br><button class="fc-vote-button fc-downvote" data-joke-id="<?php echo esc_attr(get_the_ID()); ?>" data-vote-type="downvote">Downvote</button></p>
         </div>
         <div class="fc-fart-joke-meta">
             <p class="fc-fart-joke-categories">

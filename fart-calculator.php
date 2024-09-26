@@ -753,7 +753,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
      * Shortcode to Display a List of Fart Brands.
      */
    
-public function fc_display_fart_details_list($atts) {
+    public function fc_display_fart_details_list($atts) {//Fart Brand Details Shortcode
     $atts = shortcode_atts(array(
         'posts_per_page' => -1,
     ), $atts, 'fart_details');
@@ -766,22 +766,26 @@ public function fc_display_fart_details_list($atts) {
     ob_start();
 
     if ($query->have_posts()) {
-        echo '<div class="fc-fart-details">';
+        echo '<div class="fc-fart-brand-details">';
         while ($query->have_posts()) {
             $query->the_post();
             ?>
-            <div class="fc-fart-detail">
-                <h2 class="fc-fart-detail-title"><?php the_title(); ?></h2>
+            <div class="fc-fart-brand-detail">
+                <h2 class="fc-fart-brand-detail-title"><?php the_title(); ?></h2>
                 <?php
                 // Display the featured image if it exists
                 if (has_post_thumbnail()) {
-                    echo '<div class="fc-fart-detail-thumbnail">';
+                    echo '<div class="fc-fart-brand-detail-thumbnail">';
                     the_post_thumbnail('medium');
                     echo '</div>';
                 }
                 ?>
-                <div class="fc-fart-detail-content">
-                    <?php the_content(); ?>
+                <div class="fc-fart-brand-detail-content">
+                    <?php 
+                    // Get the content and apply bold styling
+                    $content = get_the_content();
+                    echo fc_bold_specific_fields($content); 
+                    ?>
                 </div>
                 <?php
                 // Get upvotes and downvotes
@@ -808,8 +812,8 @@ public function fc_display_fart_details_list($atts) {
 
     wp_reset_postdata();
 
-    return ob_get_clean();
-}
+        return ob_get_clean();
+    }
 
 
     /**
