@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Fart Calculator
  * Description: A fun calculator that estimates fart frequency based on user inputs, with detailed rankings and front-end submission.
- * Version: 1.8 
+ * Version: 1.9 
  * Author: Seth Shoultes
  * License: GPL2
  */
