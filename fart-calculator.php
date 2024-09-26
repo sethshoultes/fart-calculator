@@ -752,47 +752,64 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     /**
      * Shortcode to Display a List of Fart Brands.
      */
-   public function fc_display_fart_details_list( $atts ) {
+   
+public function fc_display_fart_details_list($atts) {
+    $atts = shortcode_atts(array(
+        'posts_per_page' => -1,
+    ), $atts, 'fart_details');
+
+    $query = new WP_Query(array(
+        'post_type'      => 'fart_detail',
+        'posts_per_page' => $atts['posts_per_page'],
+    ));
+
     ob_start();
 
-    // Attributes and defaults
-    $atts = shortcode_atts( array(
-        'columns' => '3',
-    ), $atts, 'fart_details_list' );
+    if ($query->have_posts()) {
+        echo '<div class="fc-fart-details">';
+        while ($query->have_posts()) {
+            $query->the_post();
+            ?>
+            <div class="fc-fart-detail">
+                <h2 class="fc-fart-detail-title"><?php the_title(); ?></h2>
+                <?php
+                // Display the featured image if it exists
+                if (has_post_thumbnail()) {
+                    echo '<div class="fc-fart-detail-thumbnail">';
+                    the_post_thumbnail('medium');
+                    echo '</div>';
+                }
+                ?>
+                <div class="fc-fart-detail-content">
+                    <?php the_content(); ?>
+                </div>
+                <?php
+                // Get upvotes and downvotes
+                $upvotes = get_post_meta(get_the_ID(), '_fc_fart_detail_upvotes', true);
+                $downvotes = get_post_meta(get_the_ID(), '_fc_fart_detail_downvotes', true);
 
-    // Query Fart Brands
-    $fart_details = get_posts( array(
-        'post_type'      => 'fart_detail',
-        'posts_per_page' => -1,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-    ) );
-
-    if ( ! empty( $fart_details ) ) {
-        echo '<div class="fc-fart-details-list">';
-        foreach ( $fart_details as $fart ) {
-            $volume    = get_post_meta( $fart->ID, '_fc_fart_volume', true );
-            $smell     = get_post_meta( $fart->ID, '_fc_fart_smell', true );
-            $duration  = get_post_meta( $fart->ID, '_fc_fart_duration', true );
-            $fart_link = get_permalink( $fart->ID );
-            $fart_description = get_post_field('post_content', $fart->ID);
-            $fart_date = get_the_date( 'F j, Y', $fart->ID );
-
-            // Improved HTML structure
-            echo '<div class="fc-fart-detail">';
-            echo '<h3><a href="' . esc_url( $fart_link ) . '">' . esc_html( get_the_title( $fart->ID ) ) . '</a></h3>';
-            echo '<p class="fc-fart-date"><strong>' . __( 'Date:', 'fart-calculator' ) . '</strong> ' . esc_html( $fart_date ) . '</p>';
-            echo '<p class="fc-fart-volume"><strong>' . __( 'Volume:', 'fart-calculator' ) . '</strong> ' . esc_html( $volume ) . '</p>';
-            echo '<p class="fc-fart-smell"><strong>' . __( 'Smell:', 'fart-calculator' ) . '</strong> ' . esc_html( $smell ) . '</p>';
-            echo '<p class="fc-fart-duration"><strong>' . __( 'Duration:', 'fart-calculator' ) . '</strong> ' . esc_html( $duration ) . ' ' . __( 'seconds', 'fart-calculator' ) . '</p>';
-            echo '<p class="fc-fart-description"><strong>' . __( 'Description:', 'fart-calculator' ) . '</strong> ' . esc_html( $fart_description ) . '</p>';
-            echo '</div>';
+                // Default to 0 if no upvotes/downvotes yet
+                $upvotes = $upvotes ? $upvotes : 0;
+                $downvotes = $downvotes ? $downvotes : 0;
+                ?>
+                <div class="fc-fart-detail-voting">
+                    <div class="fc-fart-detail-votes">
+                        <p><strong>👍 Upvotes:</strong> <?php echo esc_html($upvotes); ?> <br><button class="fc-vote-button fc-upvote" data-detail-id="<?php echo esc_attr(get_the_ID()); ?>" data-vote-type="upvote">👍 Upvote</button></p>
+                        <p><strong>👎 Downvotes:</strong> <?php echo esc_html($downvotes); ?> <br><button class="fc-vote-button fc-downvote" data-detail-id="<?php echo esc_attr(get_the_ID()); ?>" data-vote-type="downvote">👎 Downvote</button></p>
+                    </div>
+                </div>
+            </div>
+            <?php
         }
         echo '</div>';
-        }
-
-        return ob_get_clean();
+    } else {
+        echo '<p>' . __('No fart details found.', 'fart-calculator') . '</p>';
     }
+
+    wp_reset_postdata();
+
+    return ob_get_clean();
+}
 
 
     /**
@@ -1017,7 +1034,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
         return ob_get_clean();
     }
 
-    // Shortcode to display fart jokes
+    // Shortcode to display fart jokes. [fart_jokes]
     public function fc_display_fart_jokes() {
         ob_start();
     
@@ -1027,7 +1044,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             'orderby'        => 'date',
             'order'          => 'DESC',
         ) );
-    
+        //return print_r($fart_jokes);
         if ( $fart_jokes->have_posts() ) {
             echo '<div class="fc-fart-jokes-list">'; // Container for all jokes
             while ( $fart_jokes->have_posts() ) {
@@ -1041,6 +1058,28 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
     
                 // Output the joke with some HTML structure for styling
                 echo '<div class="fc-fart-joke-item">'; // Individual joke container
+
+
+// Display the featured image if it exists
+if (has_post_thumbnail()) {
+    $thumbnail_id = get_post_thumbnail_id();
+    $thumbnail_url = wp_get_attachment_image_url($thumbnail_id, 'thumbnail');
+    error_log('Featured Image ID: ' . $thumbnail_id);
+    error_log('Featured Image URL: ' . $thumbnail_url);
+
+    echo '<div class="fc-fart-joke-thumbnail">';
+    echo '<a href="' . esc_url(get_permalink()) . '">';
+    the_post_thumbnail('thumbnail');
+    echo '</a>';
+    echo '</div>';
+} else {
+    error_log('No featured image for post ID: ' . get_the_ID());
+    echo '<div class="fc-fart-joke-no-thumbnail">';
+    echo '<p>No featured image available.</p>';
+    echo '</div>';
+}
+
+
                 echo '<h3 class="fc-fart-joke-title"><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></h3>'; // Title with link
                 echo '<div class="fc-fart-joke-excerpt">' . esc_html( get_the_excerpt() ) . '</div>'; // Excerpt for a brief preview
                 echo '<div class="fc-fart-joke-votes">';
