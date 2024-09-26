@@ -771,7 +771,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
             $query->the_post();
             ?>
             <div class="fc-fart-brand-detail">
-                <h2 class="fc-fart-brand-detail-title"><?php the_title(); ?></h2>
+                <h2 class="fc-fart-brand-detail-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
                 <?php
                 // Display the featured image if it exists
                 if (has_post_thumbnail()) {
