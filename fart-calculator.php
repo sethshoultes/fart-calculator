@@ -784,7 +784,7 @@ public function fc_save_fart_joke_meta_boxes( $post_id ) {
                     <?php 
                     // Get the content and apply bold styling
                     $content = get_the_content();
-                    echo fc_bold_specific_fields($content); 
+                    echo $content; 
                     ?>
                 </div>
                 <?php
@@ -1300,7 +1300,6 @@ if (has_post_thumbnail()) {
     /**
      * Loads the Custom Templates for Single Fart Brand and Single Fart Joke.
      */
-    //TODO: Add a WP Theme template for fart jokes
     public function fc_load_fart_detail_template( $template ) {
         if ( is_singular( 'fart_detail' ) ) {
             // Check if the template exists in the theme first
